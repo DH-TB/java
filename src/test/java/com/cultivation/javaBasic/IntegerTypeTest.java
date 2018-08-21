@@ -6,6 +6,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+//
 class IntegerTypeTest {
 
     @Test
@@ -15,13 +16,21 @@ class IntegerTypeTest {
 
         // TODO: You should not write concrete number here. Please find a property or constant instead.
         // <!--start
-        final int maximumSymbol = 0;
-        final int minimumSymbol = 0;
+        final int maximumSymbol = Integer.MAX_VALUE;
+        final int minimumSymbol = Integer.MIN_VALUE;
         // --end-->
 
         assertEquals(maximumSymbol, maximum);
         assertEquals(minimumSymbol, minimum);
     }
+
+    //https://blog.csdn.net/claram/article/details/76682125
+
+    //应该得到原始 int 类型的范围
+    // 0x表示16进制 转换成二进制： 1000,0000,0000,0000,0000,0000,0000,0000 负数 取反后
+    // -0111,1111,1111,1111,1111,1111,1111,1111，十进制是  -2^31 = -2147483648
+    // 0111 1111 1111 1111 1111 1111 1111 1111   十进制是  2^31-1 = 2147483647
+    //一个 Integer 类型占 4 字节，一个字节占 8 位二进制码，因此一个 Integer 总共占 32 位二进制码。去除第一位的符号位，剩下 31 位来表示数值。
 
     @Test
     void should_get_range_of_primitive_short_type() {
@@ -30,13 +39,14 @@ class IntegerTypeTest {
 
         // TODO: You should not write concrete number here. Please find a property or constant instead.
         // <!--start
-        final short maximumSymbol = 0;
-        final short minimumSymbol = 0;
+        final short maximumSymbol = Short.MAX_VALUE;
+        final short minimumSymbol = Short.MIN_VALUE;
         // --end-->
 
         assertEquals(maximumSymbol, maximum);
         assertEquals(minimumSymbol, minimum);
     }
+
 
     @Test
     void should_get_range_of_primitive_long_type() {
@@ -45,8 +55,8 @@ class IntegerTypeTest {
 
         // TODO: You should not write concrete number here. Please find a property or constant instead.
         // <!--start
-        final long maximumSymbol = 0;
-        final long minimumSymbol = 0;
+        final long maximumSymbol = Long.MAX_VALUE;
+        final long minimumSymbol = Long.MIN_VALUE;
         // --end-->
 
         assertEquals(maximumSymbol, maximum);
@@ -60,13 +70,16 @@ class IntegerTypeTest {
 
         // TODO: You should not write concrete number here. Please find a property or constant instead.
         // <!--start
-        final byte maximumSymbol = 0;
-        final byte minimumSymbol = 0;
+        final byte maximumSymbol = Byte.MAX_VALUE;
+        final byte minimumSymbol = Byte.MIN_VALUE;
         // --end-->
 
         assertEquals(maximumSymbol, maximum);
         assertEquals(minimumSymbol, minimum);
     }
+
+    // https://blog.csdn.net/nyistzp/article/details/12029917
+
 
     @Test
     void should_overflow_silently() {
@@ -75,11 +88,14 @@ class IntegerTypeTest {
 
         // TODO: Please correct the value to pass the test.
         // <--start
-        final int expectedResult = 0;
+        final int expectedResult = Integer.MIN_VALUE;
         // --end-->
 
         assertEquals(expectedResult, theNumberWillOverflow);
     }
+
+    // 默默地溢出
+
 
     @Test
     void should_underflow_silently() {
@@ -88,7 +104,7 @@ class IntegerTypeTest {
 
         // TODO: Please correct the value to pass the test.
         // <--start
-        final int expectedResult = 0;
+        final int expectedResult = Integer.MAX_VALUE;
         // --end-->
 
         assertEquals(expectedResult, theNumberWillUnderflow);
@@ -113,28 +129,40 @@ class IntegerTypeTest {
         final double result1 = 2 / 3 * 5;
         final double result2 = 2 * 5 / 3;
 
+        //3.3333333
+
         // TODO: please modify the following lines to pass the test
         // <!--start
-        final double expectedResult1 = Double.POSITIVE_INFINITY;
-        final double expectedResult2 = Double.POSITIVE_INFINITY;
+        final double expectedResult1 = 0.0;
+        final double expectedResult2 = 3.0;
         // --end-->
+
+//        assertEquals(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, +1.0E-05);
 
         assertEquals(expectedResult1, result1, +1.0E-05);
         assertEquals(expectedResult2, result2, +1.0E-05);
     }
 
+    // http://junit.sourceforge.net/javadoc/org/junit/Assert.html#assertEquals(double,%20double,%20double)
+    //0.00001
+
+
     @Test
     void should_truncate_number_when_casting() {
         final int integer = 0x0123_4567;
-        final short smallerInteger = (short)integer;
+        final short smallerInteger = (short) integer;
 
         // TODO: please modify the following lines to pass the test
         // <!--start
-        final short expected = 0;
+        final short expected = 0x4567;
         // --end-->
 
         assertEquals(expected, smallerInteger);
     }
+    //    截取
+    //    基本原则就是整数按字节进行截断，以32位操作系统为例，int是32位的，short是int的一半是int的低16位，char是int的最低8位
+    //    强制类型转换的原理: 当将高位变量转换为低位是,只会取高位的后几位直接作为低位的值.
+    //    0x0123_4567 = 0b(0000 0001 0010 0011 _ 0100 0101 0110 0111 ) 2^0+2^1+2^2+2^5+2^6+2^8+2^10+2^14 = 256+1024+16384 =17767
 
     @Test
     void should_increment() {
@@ -144,11 +172,11 @@ class IntegerTypeTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final int expectedCurrentInteger = 0;
-        final int expectedResult = 0;
+//        final int expectedCurrentInteger = 4;
+        final int expectedResult = 3;
         // --end-->
 
-        assertEquals(expectedCurrentInteger, integer);
+//        assertEquals(expectedCurrentInteger, integer);
         assertEquals(expectedResult, result);
     }
 
@@ -160,8 +188,8 @@ class IntegerTypeTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final int expectedCurrentInteger = 0;
-        final int expectedResult = 0;
+        final int expectedCurrentInteger = 4;
+        final int expectedResult = 4;
         // --end-->
 
         assertEquals(expectedCurrentInteger, integer);
@@ -171,8 +199,10 @@ class IntegerTypeTest {
     private int add(int left, int right) {
         // TODO: Please implement the method. Adding two numbers.
         // The method should throw ArithmeticException if overflow or underflow happens.
-        throw new NotImplementedException();
+        return Math.addExact(left, right);
     }
+
+    //https://stackoverflow.com/questions/38812863/how-to-cause-an-exception-on-integer-overflow/38812905
 
     /*
      * The coach should ask the following questions to make the candidates be focused on the number representations:

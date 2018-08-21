@@ -10,13 +10,13 @@ class CharTypeTest {
     void should_describe_escaped_chars() {
         // TODO: please modify the following code to pass the test
         // <--start
-        final char backspace = ' ';
-        final char tab = ' ';
-        final char lineFeed = ' ';
-        final char carriageReturn = ' ';
-        final char doubleQuote = ' ';
-        final char singleQuote = ' ';
-        final char backslash = ' ';
+        final char backspace = '\b'; //退格
+        final char tab = '\t';
+        final char lineFeed = '\n';//换行
+        final char carriageReturn = '\r'; //回车
+        final char doubleQuote = '\"'; //双引号
+        final char singleQuote = '\''; //单引号
+        final char backslash = '\\'; //反斜杠
         // --end-->
 
         assertEquals(EscapedChars.BACKSPACE.getValue(), backspace);
@@ -27,6 +27,9 @@ class CharTypeTest {
         assertEquals(EscapedChars.SINGLE_QUOTE.getValue(), singleQuote);
         assertEquals(EscapedChars.BACKSLASH.getValue(), backslash);
     }
+//    UTF-8 1 / 2 / 3
+//    UTF-16 2 / 4
+//    UTF-32 4
 
     /*
      * - Could a char represent one unicode character? Or, in other words, could a char represent a code point?
@@ -35,3 +38,8 @@ class CharTypeTest {
      * - Why there are many methods in Character class accepting an int parameter rather than char?
      */
 }
+
+// String的每一个char其实都可以用一个Unicode编码表示，
+//一个完整的Unicode字符叫CodePoint
+//        一个Java char 叫代码单元code unit;
+// http://www.voidcn.com/article/p-vnpftcts-k.html
