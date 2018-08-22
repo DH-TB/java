@@ -176,11 +176,11 @@ class ObjectTest {
 
     @Test
     void should_get_message_of_var_length_parameters() {
-        final String message = getMessageOfVarLengthParameters(1, 2, 3);
+        final String message = getMessageOfVarLengthParameters(1, 2, 3, "Hello");
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = "1\n2\n3\n";
+        final String expected = "1\n2\n3\nHello\n";
         // --end-->
 
         assertEquals(expected, message);
@@ -194,15 +194,27 @@ class ObjectTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = "1\n2\n3\n";
+        final String expected = "1\n2\n3\nHello\n";
+
         // --end-->
 
         assertEquals(expected, message);
     }
 
+
+    @Test
+    void should_get_argument(){
+        VarLength varLength = new VarLength();
+        String actual = varLength.getArgument();
+        assertEquals("noArgument", actual);
+    }
+
+
     private static String getMessageOfVarLengthParameters(Object... args) {
         StringBuilder builder = new StringBuilder();
+
         for (Object arg : args) {
+
             builder.append(arg.toString()).append("\n");
         }
 
