@@ -1,6 +1,5 @@
 package com.cultivation.javaBasic.showYourIntelligence;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
@@ -39,6 +38,7 @@ public class PersonForEquals {
 
         if (obj == null || getClass() != obj.getClass()) return false;
         PersonForEquals person = (PersonForEquals) obj;
+
         return name.equals(person.name) && yearOfBirth == person.yearOfBirth;
 
         // --end-->
