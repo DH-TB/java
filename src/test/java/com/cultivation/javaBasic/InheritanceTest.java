@@ -96,13 +96,16 @@ class InheritanceTest {
         assertEquals(expectedName, instance.getName());
     }
 
+
     @SuppressWarnings({"ConstantConditions", "RedundantCast", "UnnecessaryLocalVariable"})
     @Test
     void should_use_caution_when_dealing_with_array_type() {
         DerivedFromSuperClassWithDefaultConstructor[] array = new DerivedFromSuperClassWithDefaultConstructor[4];
-        SuperClassWithDefaultConstructor[] arrayWithBaseType = (SuperClassWithDefaultConstructor[])array;
+        SuperClassWithDefaultConstructor[] arrayWithBaseType = array;
         boolean willThrow = false;
 
+        //可以读出 是父类
+        //不可以写 因为实际存的是子类
         try {
             arrayWithBaseType[arrayWithBaseType.length - 1] = new SuperClassWithDefaultConstructor();
         } catch (Exception error) {
@@ -116,6 +119,7 @@ class InheritanceTest {
 
         assertEquals(expected.get(), willThrow);
     }
+
 
     @SuppressWarnings("UnnecessaryLocalVariable")
     @Test
@@ -158,6 +162,7 @@ class InheritanceTest {
         assertEquals(expectedResult1.get(), nested instanceof NestedDerivedClassWithName);
         assertEquals(expectedResult2.get(), nested instanceof DerivedFromBaseClassWithName);
         assertEquals(expectedResult3.get(), nested instanceof BaseClassWithName);
+        assertTrue(nested instanceof Cloneable);
     }
 
     @SuppressWarnings({"ConstantConditions", "UnnecessaryBoxing"})
