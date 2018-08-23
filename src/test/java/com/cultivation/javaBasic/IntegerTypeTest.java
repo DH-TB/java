@@ -172,11 +172,11 @@ class IntegerTypeTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-//        final int expectedCurrentInteger = 4;
+        final int expectedCurrentInteger = 4;
         final int expectedResult = 3;
         // --end-->
 
-//        assertEquals(expectedCurrentInteger, integer);
+        assertEquals(expectedCurrentInteger, integer);
         assertEquals(expectedResult, result);
     }
 
