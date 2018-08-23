@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MyAppFrameworkTest {
+
     @Test
     void should_throw_if_register_duplicated_controller_clazz() {
         MyAppFramework app = new MyAppFramework();
