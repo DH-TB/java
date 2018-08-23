@@ -24,7 +24,7 @@ public class MyAppFramework {
         // --end-->
     }
 
-    public Response getResponse(String requestController, String requestMethod) throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+    public Response getResponse(String requestController, String requestMethod) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         // TODO: Please implement the method
         // <--start
         Class aClass = controllerList.stream().filter(c -> c.getName().equals(requestController)).findAny().orElse(null);
@@ -32,12 +32,13 @@ public class MyAppFramework {
         if(Objects.isNull(aClass)){
             return new Response(404);
         }
-        Object instance = aClass.newInstance();
 
         Method method = getMethod(requestMethod, aClass);
         if (Objects.isNull(method)){
             return new Response(404);
         }
+
+        Object instance = aClass.newInstance();
 
         return getResponse(instance, method);
         // --end-->
@@ -53,19 +54,27 @@ public class MyAppFramework {
     }
 
     private Response getResponse(Object instance, Method method) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        if (!isPublic(method)) return new Response("not fount", 403);
+        if (!isPublic(method)) return new Response(403);
         boolean b = returnTypeIsResponse(method);
-        if (!b) return new Response("not fount", 503);
+        if (!b) return new Response(503);
 
         if(method.getParameterCount() > 0){
-            return new Response("not fount", 503);
+            return new Response(503);
         }
-        return (Response) method.invoke(instance);
+
+        Object result;
+        try {
+            result = method.invoke(instance);
+        }
+        catch (Exception e){
+            return new Response(500);
+        }
+
+        return (Response) result;
     }
 
     private boolean returnTypeIsResponse(Method declaredMethod) {
         Class<?> returnType = declaredMethod.getReturnType();
-        System.out.println(returnType.getName());
         return returnType == Response.class;
     }
 
