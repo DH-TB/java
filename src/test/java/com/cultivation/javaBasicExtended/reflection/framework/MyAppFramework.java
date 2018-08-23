@@ -40,7 +40,7 @@ public class MyAppFramework {
 
         Object instance = aClass.newInstance();
 
-        return getResponse(instance, method);
+        return getResult(instance, method);
         // --end-->
     }
 
@@ -53,15 +53,15 @@ public class MyAppFramework {
         return method;
     }
 
-    private Response getResponse(Object instance, Method method) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    private Response getResult(Object instance, Method method) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         if (!isPublic(method)) return new Response(403);
-        boolean b = returnTypeIsResponse(method);
-        if (!b) return new Response(503);
+        if (!returnTypeIsResponse(method)) return new Response(503);
+        if(method.getParameterCount() > 0) return new Response(503);
 
-        if(method.getParameterCount() > 0){
-            return new Response(503);
-        }
+        return invokeMethod(instance, method);
+    }
 
+    private Response invokeMethod(Object instance, Method method) {
         Object result;
         try {
             result = method.invoke(instance);
