@@ -2,12 +2,9 @@ package com.cultivation.javaBasic;
 
 import org.junit.jupiter.api.Test;
 
-import static java.lang.Float.NEGATIVE_INFINITY;
-import static java.lang.Float.POSITIVE_INFINITY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 
 class FloatingTypeTest {
     @Test

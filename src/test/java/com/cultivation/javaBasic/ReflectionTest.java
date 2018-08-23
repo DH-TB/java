@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+//4
 class ReflectionTest {
     @Test
     void should_be_able_to_get_class_object() {
@@ -133,10 +135,8 @@ class ReflectionTest {
 
         // TODO: please get the methods who contains MyAnnotation annotation.
         // <--start
-//        String[] methodsContainsAnnotations = null;
 
         Method[] methods = theClass.getMethods();
-
 
         List<String> methodList = new ArrayList<>();
         for (Method method : methods) {
@@ -145,6 +145,7 @@ class ReflectionTest {
             }
         }
         String[] methodsContainsAnnotations = methodList.toArray(new String[0]);
+
 
 
         // --end-->

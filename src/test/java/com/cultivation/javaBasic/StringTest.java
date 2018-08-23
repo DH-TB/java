@@ -8,6 +8,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+//5
 class StringTest {
     @SuppressWarnings({"StringEquality", "ConstantConditions"})
     @Test
@@ -174,8 +175,7 @@ class StringTest {
         for (int i = 0; i < 3; i++) {
             builder.append(char2);
         }
-        builder.append(char1);
-        builder.append("\n");
+        builder.append(char1).append("\n");
         return builder;
     }
 

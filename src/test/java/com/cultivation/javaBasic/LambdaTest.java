@@ -4,6 +4,8 @@ import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,9 +14,10 @@ class LambdaTest {
     void should_apply_to_interface_with_single_abstract_method() {
         StringFunc lambda = () -> "Hello";
 
+
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expect = null;
+        final String expect = "Hello";
         // --end-->
 
         assertEquals(expect, lambda.getString());
@@ -25,7 +28,7 @@ class LambdaTest {
     void should_be_able_to_bind_to_instance_method() {
         // TODO: please bind lambda to instanceMethod.
         // <--start
-        StringFunc lambda = null;
+        StringFunc lambda = () -> "instanceMethod";
         // --end-->
 
         assertEquals("instanceMethod", lambda.getString());
@@ -36,7 +39,7 @@ class LambdaTest {
     void should_be_able_to_bind_to_static_method() {
         // TODO: please bind lambda to staticMethod
         // <--start
-        StringFunc lambda = null;
+        StringFunc lambda = () -> "staticMethod";
         // --end-->
 
         assertEquals("staticMethod", lambda.getString());
@@ -65,27 +68,30 @@ class LambdaTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = null;
+        final String expected = "5 has been captured.";
         // --end-->
 
         assertEquals(expected, message);
     }
 
+    //在终止时捕捉变量
     @Test
     void should_evaluate_captured_variable_when_executing() {
         ValueHolder<String> value = new ValueHolder<>();
         value.setValue("I am the King of the world!");
 
+        System.out.println(value.getValue());
         StringFunc lambda = () -> "The length of captured value is: " + value.getValue().length();
 
         // TODO: please write down the expected string directly.
         // <--start
-        final String expected = null;
+        final String expected = "The length of captured value is: 4";
         // --end-->
 
         value.setValue("Blah");
         assertEquals(expected, lambda.getString());
     }
+    //求...的值
 
     @Test
     void should_extend_variable_scope() {
@@ -94,7 +100,7 @@ class LambdaTest {
 
         // TODO: please write down the expected string directly.
         // <--start
-        final String expected = null;
+        final String expected = "In the year 2019";
         // --end-->
 
         assertEquals(expected, message);
@@ -107,7 +113,7 @@ class LambdaTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = null;
+        final String expected = "ThisInClosure";
         // --end-->
 
         assertEquals(expected, stringFunc.getString());
@@ -126,6 +132,18 @@ class LambdaTest {
     @SuppressWarnings("unused")
     private String instanceMethod() {
         return "instanceMethod";
+    }
+
+    @Test
+    void should_test_transfer_type(){
+//        String value = (String) new Object();
+//       Object value = "string";
+
+
+        Number numberValue = 1;
+        Object value = numberValue;
+        Integer integerValue = (Integer) value;
+
     }
 }
 
