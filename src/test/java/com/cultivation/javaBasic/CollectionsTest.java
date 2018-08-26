@@ -9,7 +9,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-
+//
 class CollectionsTest {
     @Test
     void should_go_through_an_iterator() {
@@ -26,8 +26,7 @@ class CollectionsTest {
     private static List<String> createList(Iterator<String> iterator) {
         List<String> list = new ArrayList<>();
 
-        // TODO: you could ONLY use `Iterator.hasNext` and `Iterator.next` API to copy items to a `List`. No `for` is
-        // allowed.
+        // TODO: you could ONLY use `Iterator.hasNext` and `Iterator.next` API to copy items to a `List`. No `for` is allowed.
         // <--start
         while (iterator.hasNext()){
             list.add(iterator.next());

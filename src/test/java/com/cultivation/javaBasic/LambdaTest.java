@@ -1,13 +1,19 @@
 package com.cultivation.javaBasic;
 
+import com.cultivation.javaBasic.showYourIntelligence.PersonForEquals;
 import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LambdaTest {
     @Test
@@ -28,7 +34,7 @@ class LambdaTest {
     void should_be_able_to_bind_to_instance_method() {
         // TODO: please bind lambda to instanceMethod.
         // <--start
-        StringFunc lambda = () -> "instanceMethod";
+        StringFunc lambda = this::instanceMethod;
         // --end-->
 
         assertEquals("instanceMethod", lambda.getString());
@@ -39,7 +45,7 @@ class LambdaTest {
     void should_be_able_to_bind_to_static_method() {
         // TODO: please bind lambda to staticMethod
         // <--start
-        StringFunc lambda = () -> "staticMethod";
+        StringFunc lambda = LambdaTest::staticMethod;
         // --end-->
 
         assertEquals("staticMethod", lambda.getString());
@@ -50,8 +56,9 @@ class LambdaTest {
     void should_bind_to_constructor() {
         // TODO: please bind lambda to constructor of ArrayList<Integer>
         // <--start
-        GenericFunc<ArrayList<Integer>> lambda = null;
+        GenericFunc<ArrayList<Integer>> lambda = ArrayList::new;
         // --end-->
+
 
         ArrayList<Integer> value = lambda.getValue();
 
@@ -74,13 +81,27 @@ class LambdaTest {
         assertEquals(expected, message);
     }
 
+    @Test
+    void should_in_stringfunc() throws IllegalAccessException {
+        int captured  = 5;
+        StringFunc lambda = () -> captured + "has been captured.";
+
+        Field[] declaredFields = lambda.getClass().getDeclaredFields();
+        for(Field field : declaredFields){
+            field.setAccessible(true);
+            boolean modifiers = Modifier.isFinal(field.getModifiers());
+            System.out.println(modifiers);
+
+            Object obj = field.get(lambda);
+        }
+    }
+
     //在终止时捕捉变量
     @Test
     void should_evaluate_captured_variable_when_executing() {
         ValueHolder<String> value = new ValueHolder<>();
         value.setValue("I am the King of the world!");
 
-        System.out.println(value.getValue());
         StringFunc lambda = () -> "The length of captured value is: " + value.getValue().length();
 
         // TODO: please write down the expected string directly.
@@ -134,17 +155,17 @@ class LambdaTest {
         return "instanceMethod";
     }
 
+
     @Test
-    void should_test_transfer_type(){
-//        String value = (String) new Object();
-//       Object value = "string";
+    void should_new_object(){
+        Supplier supplier = Object::new;
 
+        System.out.println(Object.class);
+        System.out.println(String.class.getName());
 
-        Number numberValue = 1;
-        Object value = numberValue;
-        Integer integerValue = (Integer) value;
-
+        assertTrue(Object.class.equals(supplier.get().getClass()));
     }
+
 }
 
 /*

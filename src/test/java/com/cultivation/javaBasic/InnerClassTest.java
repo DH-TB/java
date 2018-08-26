@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+//
 class InnerClassTest {
     @SuppressWarnings("ConstantConditions")
     @Test
@@ -19,7 +20,7 @@ class InnerClassTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Integer> expected = Optional.empty();
+        final Optional<Integer> expected = Optional.of(2019);
         // --end-->
 
         assertEquals(expected.get().intValue(), instance.getYear());
@@ -35,11 +36,12 @@ class InnerClassTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Integer> expected = Optional.empty();
+        final Optional<Integer> expected = Optional.of(2019);
         // --end-->
 
         assertEquals(expected.get().intValue(), instance.getYear());
     }
+    //成员内部类
 
     @SuppressWarnings("ConstantConditions")
     @Test
@@ -49,11 +51,12 @@ class InnerClassTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Integer> expected = Optional.empty();
+        final Optional<Integer> expected = Optional.of(2019);
         // --end-->
 
         assertEquals(expected.get().intValue(), instance.getYear());
     }
+    //局部内部类
 
     @SuppressWarnings("ConstantConditions")
     @Test
@@ -63,11 +66,12 @@ class InnerClassTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Integer> expected = Optional.empty();
+        final Optional<Integer> expected = Optional.of(2019);
         // --end-->
 
         assertEquals(expected.get().intValue(), instance.getYear());
     }
+    //匿名类
 
     @Test
     void should_create_instance_for_static_inner_class() {
@@ -76,9 +80,11 @@ class InnerClassTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = null;
+        final String expected = "Hello";
         // --end-->
 
         assertEquals(expected, inner.getName());
     }
 }
+
+//http://www.runoob.com/w3cnote/java-inner-class-intro.html
