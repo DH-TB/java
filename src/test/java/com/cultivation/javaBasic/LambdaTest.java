@@ -1,18 +1,14 @@
 package com.cultivation.javaBasic;
 
-import com.cultivation.javaBasic.showYourIntelligence.PersonForEquals;
 import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LambdaTest {
@@ -81,6 +77,7 @@ class LambdaTest {
         assertEquals(expected, message);
     }
 
+    //在终止时捕捉变量
     @Test
     void should_in_stringfunc() throws IllegalAccessException {
         int captured  = 5;
@@ -102,6 +99,7 @@ class LambdaTest {
         ValueHolder<String> value = new ValueHolder<>();
         value.setValue("I am the King of the world!");
 
+        System.out.println(value.getValue());
         StringFunc lambda = () -> "The length of captured value is: " + value.getValue().length();
 
         // TODO: please write down the expected string directly.
