@@ -48,6 +48,15 @@ class PosMachineTest {
         assertEquals(expected, receipt);
     }
 
+//    @Test
+//    void should_throw_exception_when_barcode_error() throws IOException {
+//        PosMachine posMachine = new PosMachine();
+//        posMachine.readDataSource(createJsonDataBase());
+//        final String barcode = "[1234]";
+//
+//        assertThrows(IllegalArgumentException.class, () -> posMachine.printReceipt(barcode));
+//    }
+
     @Test
     void should_print_receipt_with_one_item() throws IOException {
         PosMachine posMachine = new PosMachine();
@@ -91,6 +100,7 @@ class PosMachineTest {
         PosMachine posMachine = new PosMachine();
         posMachine.readDataSource(createJsonDataBase());
         final String barcode = createBarCodes("0001", "0003", "0005", "0003");
+        System.out.println(barcode);
         String receipt = posMachine.printReceipt(barcode);
 
         String line = System.lineSeparator();

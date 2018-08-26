@@ -96,6 +96,14 @@ class MyAppFrameworkTest {
     }
 
     @Test
+    void should_get_error_message_if_unhandled_exception_occurred_during_invovcation() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        MyAppFramework app = new MyAppFramework();
+        app.registerController(UnhandledExceptionController.class);
+
+        Response response = app.getResponse("com.cultivation.javaBasicExtended.reflection.test.UnhandledExceptionController","fail");
+        assertEquals("Oh god!", response.getValue());
+    }
+    @Test
     void should_get_503_if_action_return_type_is_not_response() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         MyAppFramework app = new MyAppFramework();
         app.registerController(BadActionController.class);

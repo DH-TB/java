@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MatrixTest {
+
     @Test
     void should_throws_if_matrix_array_is_null() {
         IllegalArgumentException exception = assertThrows(
@@ -16,7 +17,7 @@ class MatrixTest {
     @Test
     void should_throws_if_matrix_array_contains_0_rows() {
         IllegalArgumentException exception = assertThrows(
-            IllegalArgumentException.class, () -> new Matrix(new int[0][]));
+            IllegalArgumentException.class, ()   -> new Matrix(new int[0][]));
         assertEquals("Raw matrix contains 0 row", exception.getMessage());
     }
 
@@ -50,6 +51,9 @@ class MatrixTest {
         assertEquals("Raw matrix is not rectangle", exception.getMessage());
     }
 
+
+    //长方形
+
     @Test
     void should_throws_if_matrix_is_null() {
         final int[][] rawMatrix = new int[][] {
@@ -62,6 +66,7 @@ class MatrixTest {
         assertThrows(IllegalArgumentException.class, () -> Matrix.multiply(null, new Matrix(rawMatrix)));
     }
 
+    //尺寸
     @Test
     void should_throws_if_matrix_dimension_not_correct() {
         int left[][] = { {3,2,3}, {5,9,8} };
@@ -70,6 +75,17 @@ class MatrixTest {
         assertThrows(
             IllegalArgumentException.class,
             () -> Matrix.multiply(new Matrix(left), new Matrix(right)));
+    }
+
+
+    @Test
+    void should_throws_if_matrix_dimension_not_correct_1() {
+        int left[][] = { {3,2,3}, {5,9,8} };
+        int right[][] = { {4,7}, {9,3}, {8,1}, {1, 1} };
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Matrix.multiply(new Matrix(right), new Matrix(left)));
     }
 
     @Test
