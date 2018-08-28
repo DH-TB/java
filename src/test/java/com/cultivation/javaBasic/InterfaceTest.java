@@ -5,7 +5,6 @@ import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-//2
 class InterfaceTest {
 
     @Test

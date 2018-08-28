@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -138,6 +137,8 @@ class ReflectionTest {
 
         Method[] methods = theClass.getMethods();
 
+//        String[] methodsContainsAnnotations = null;
+
         List<String> methodList = new ArrayList<>();
         for (Method method : methods) {
             if (method.getAnnotation(MyAnnotation.class) != null) {
@@ -146,10 +147,7 @@ class ReflectionTest {
         }
         String[] methodsContainsAnnotations = methodList.toArray(new String[0]);
 
-
-
-        // --end-->
-
+        
         assertArrayEquals(new String[]{"theMethod"}, methodsContainsAnnotations);
     }
 }
