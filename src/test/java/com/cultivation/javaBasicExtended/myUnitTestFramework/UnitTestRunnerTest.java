@@ -11,13 +11,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UnitTestRunnerTest {
-    private UnitTestRunningResult runTest(Class<?> unitTestClass) {
+    private UnitTestRunningResult runTest(Class<?> unitTestClass) throws InstantiationException, IllegalAccessException {
         UnitTestRunner runner = new UnitTestRunner();
         return runner.run(unitTestClass);
     }
 
     @Test
-    void should_run_success_unit_test() {
+    void should_run_success_unit_test() throws IllegalAccessException, InstantiationException {
         UnitTestRunningResult result = runTest(WithOneTestMethod.class);
 
         assertTrue(result.isSuccess());
@@ -25,7 +25,7 @@ class UnitTestRunnerTest {
     }
 
     @Test
-    void should_run_unit_test_and_get_details() {
+    void should_run_unit_test_and_get_details() throws IllegalAccessException, InstantiationException {
         UnitTestRunningResult result = runTest(WithOneTestMethod.class);
 
         List<TestResultItem> details = result.getDetails();
@@ -39,7 +39,7 @@ class UnitTestRunnerTest {
     }
 
     @Test
-    void should_run_unit_test_and_get_error() {
+    void should_run_unit_test_and_get_error() throws IllegalAccessException, InstantiationException {
         UnitTestRunningResult result = runTest(WithOneFailureTestMethod.class);
 
         assertFalse(result.isSuccess());
@@ -47,7 +47,7 @@ class UnitTestRunnerTest {
     }
 
     @Test
-    void should_run_unit_test_and_get_error_details() {
+    void should_run_unit_test_and_get_error_details() throws IllegalAccessException, InstantiationException {
         UnitTestRunningResult result = runTest(WithOneFailureTestMethod.class);
 
         List<TestResultItem> details = result.getDetails();
@@ -61,7 +61,7 @@ class UnitTestRunnerTest {
     }
 
     @Test
-    void should_success_if_no_test_is_found() {
+    void should_success_if_no_test_is_found() throws IllegalAccessException, InstantiationException {
         UnitTestRunningResult result = runTest(WithoutTestMethod.class);
         assertTrue(result.isSuccess());
         assertNull(result.getReason());
@@ -69,7 +69,7 @@ class UnitTestRunnerTest {
     }
 
     @Test
-    void should_report_all_failed_methods() {
+    void should_report_all_failed_methods() throws IllegalAccessException, InstantiationException {
         UnitTestRunningResult result = runTest(WithMultipleFailures.class);
 
         assertFalse(result.isSuccess());
