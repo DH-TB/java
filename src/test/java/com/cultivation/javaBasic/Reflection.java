@@ -11,5 +11,4 @@ public class Reflection{
 
     public String getString(){
         return this.name;
-    }
 }

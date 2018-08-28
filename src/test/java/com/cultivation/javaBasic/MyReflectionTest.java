@@ -14,5 +14,6 @@ class MyReflectionTest{
         Reflection instance = new Reflection();
 
         String actual = (String) method.invoke(instance, "My name");
+        assertEquals("My name", actual);
     }
 }

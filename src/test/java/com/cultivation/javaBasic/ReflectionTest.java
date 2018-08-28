@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -147,7 +148,6 @@ class ReflectionTest {
         }
         String[] methodsContainsAnnotations = methodList.toArray(new String[0]);
 
-        
         assertArrayEquals(new String[]{"theMethod"}, methodsContainsAnnotations);
     }
 }
