@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Difficulty: Hard
  */
 class PosMachineTest {
+
     @Test
     void should_print_empty_if_barcode_is_not_provided() throws IOException {
         PosMachine posMachine = new PosMachine();
@@ -47,15 +48,6 @@ class PosMachineTest {
 
         assertEquals(expected, receipt);
     }
-
-//    @Test
-//    void should_throw_exception_when_barcode_error() throws IOException {
-//        PosMachine posMachine = new PosMachine();
-//        posMachine.readDataSource(createJsonDataBase());
-//        final String barcode = "[1234]";
-//
-//        assertThrows(IllegalArgumentException.class, () -> posMachine.printReceipt(barcode));
-//    }
 
     @Test
     void should_print_receipt_with_one_item() throws IOException {

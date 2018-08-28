@@ -4,6 +4,7 @@ import com.cultivation.javaBasic.util.AnonymousClassUpdateField;
 import com.cultivation.javaBasic.util.InnerClassUpdateField;
 import com.cultivation.javaBasic.util.LocalClassUpdateField;
 import com.cultivation.javaBasic.util.StaticInnerClass;
+import com.sun.org.apache.bcel.internal.classfile.InnerClass;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -30,16 +31,12 @@ class InnerClassTest {
     @Test
     void should_refer_inner_class_from_outside() {
         InnerClassUpdateField instance = new InnerClassUpdateField();
-
         InnerClassUpdateField.YearIncrementer incrementer = instance.new YearIncrementer();
         incrementer.increment();
 
-        // TODO: please modify the following code to pass the test
-        // <--start
-        final Optional<Integer> expected = Optional.of(2019);
-        // --end-->
+        final Optional<Integer> excepted = Optional.of(2019);
 
-        assertEquals(expected.get().intValue(), instance.getYear());
+        assertEquals(excepted.get().intValue(), instance.getYear());
     }
     //成员内部类
 
@@ -85,6 +82,7 @@ class InnerClassTest {
 
         assertEquals(expected, inner.getName());
     }
+
 }
 
 //http://www.runoob.com/w3cnote/java-inner-class-intro.html

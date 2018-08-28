@@ -1,4 +1,4 @@
-package com.cultivation.javaBasic;
+package com.cultivation.javaTest;
 
 public class VarLength {
 

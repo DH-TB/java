@@ -7,6 +7,10 @@ public class StackFrameHelper {
 
         StackTraceElement[] exceptionInfo = new Exception().getStackTrace();
         StringBuilder stringBuilder = new StringBuilder();
+
+        for (StackTraceElement stackTraceElement : exceptionInfo){
+            System.out.println(stackTraceElement.getClassName());
+        }
         if(exceptionInfo.length > 0){
             stringBuilder.append(exceptionInfo[1].getClassName())
                     .append(".")

@@ -1,15 +1,14 @@
 package com.cultivation.javaBasic;
 
 import com.cultivation.javaBasic.util.*;
+import com.cultivation.javaTest.VarLength;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-//3
+
 class ObjectTest {
     @SuppressWarnings({"UnnecessaryLocalVariable", "ConstantConditions"})
     @Test
@@ -194,7 +193,7 @@ class ObjectTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = "1\n2\n3\nHello\n";
+        final String expected = "1\n2\n3\n";
 
         // --end-->
 

@@ -2,6 +2,7 @@ package com.cultivation.javaBasicExtended.reverseString;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 class StringReverser {
@@ -11,13 +12,15 @@ class StringReverser {
             throw new IllegalArgumentException();
         }
 
+        input = input.trim();
+
         if(input.length() == 0){
             return new String[0];
         }
 
-        List splitArray = Arrays.asList(input.split(" "));
+        List<String> splitArray = Arrays.asList(input.split(" "));
         Collections.reverse(splitArray);
 
-        return (String[]) splitArray.toArray(new String[0]);
+        return splitArray.toArray(new String[0]);
     }
 }
