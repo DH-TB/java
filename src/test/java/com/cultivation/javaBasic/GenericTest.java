@@ -7,10 +7,17 @@ import com.cultivation.javaBasic.util.Pair;
 import org.junit.jupiter.api.Test;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+//
 class GenericTest {
     @SuppressWarnings("unused")
     @Test
@@ -19,10 +26,30 @@ class GenericTest {
 
         // TODO: please call getMiddle method for string
         // <--start
-        final String middle = null;
+        final String middle = getMiddle(words);
+
+
         // --end-->
 
         assertEquals("Good", middle);
+    }
+
+    private String[] toStringArray(int length){
+        String[] array = new String[length];
+        return array;
+    }
+
+    private <T> T[] toArray(int length, Generic<T> instance){
+        return instance.returnArray(length);
+    }
+
+
+    @Test
+    void should_test_T_array(){
+        String[] stringArray = toArray(5, (length) -> new String[length]);
+        assertEquals(5, stringArray.length);
+
+        assertEquals(stringArray.getClass().getComponentType(), String.class);
     }
 
     @Test
@@ -34,19 +61,32 @@ class GenericTest {
         assertEquals(-1d, minimumReal, 1.0E-05);
     }
 
+    //约束
+
     @SuppressWarnings("ConstantConditions")
     @Test
     void should_not_know_generic_type_parameters_at_runtime() {
         KeyValuePair<String, Integer> pair = new KeyValuePair<>("name", 2);
         KeyValuePair<Integer, String> pairWithDifferentTypeParameter = new KeyValuePair<>(2, "name");
 
+
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Boolean> expected = Optional.empty();
+        final Optional<Boolean> expected = Optional.of(true);
         // --end-->
-
         assertEquals(expected.get(), pair.getClass().equals(pairWithDifferentTypeParameter.getClass()));
     }
+
+    @Test
+    void should_can_transfer_type(){
+        KeyValuePair<String, Integer> pair = new KeyValuePair<>("name", 2);
+
+        KeyValuePair keyValuePair = new KeyValuePair<>(new Object(),new Object());
+        KeyValuePair<String, Integer> havePair = keyValuePair;
+
+    }
+
+    // class com.cultivation.javaBasic.util.KeyValuePair
 
     @SuppressWarnings({"UnnecessaryLocalVariable", "unchecked", "unused", "ConstantConditions"})
     @Test
@@ -64,7 +104,7 @@ class GenericTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Boolean> expected = Optional.empty();
+        final Optional<Boolean> expected = Optional.of(true);
         // --end-->
 
         assertEquals(expected.get(), willThrow);
@@ -90,7 +130,13 @@ class GenericTest {
     // <--start
     @SuppressWarnings("unused")
     private static <T extends Number & Comparable<T>> T min(T[] values) {
-        throw new NotImplementedException();
+        T min = values[0];
+        for (T value : values) {
+            if (min.compareTo(value) > 0) {
+                min = value;
+            }
+        }
+        return min;
     }
     // --end-->
 
@@ -98,9 +144,33 @@ class GenericTest {
     // <--start
     @SuppressWarnings("unused")
     private static void swap(Pair<?> pair) {
-        throw new NotImplementedException();
+        swapWithGeneric(pair);
+        getArrayList();
     }
 
+    private static void genericNumber(Pair<? super Integer> pair){
+        ArrayList<Integer> integers = new ArrayList<>();
+        ArrayList<? extends Number> integers1 = integers;
+    }
+
+
+    private static <T> void swapWithGeneric(Pair<T> pair){
+        T first = pair.getFirst();
+        T second = pair.getSecond();
+
+        pair.setFirst(second);
+        pair.setSecond(first);
+    }
+
+    private static <T> ArrayList getArrayList(){
+        ArrayList<T> list = new ArrayList<>();
+        return list;
+    }
+
+    private static <T> ArrayList getArrayListWithParameter(){
+        ArrayList<T> list = new ArrayList<>();
+        return list;
+    }
     // TODO: You can add additional method within the range if you like
     // <--start
 
@@ -137,3 +207,7 @@ class GenericTest {
  *   ```
  * - Please describe the wildcard generic type.
  */
+
+interface Generic<T>{
+    T[] returnArray(int length);
+}

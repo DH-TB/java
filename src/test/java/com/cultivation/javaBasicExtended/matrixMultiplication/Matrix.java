@@ -24,6 +24,13 @@ class Matrix {
         if (matrixArray == null) {
             throw new IllegalArgumentException("Raw matrix is null");
         }
+
+        judgeParameterValid(matrixArray);
+
+        this.storage = matrixArray;
+    }
+
+    private void judgeParameterValid(int[][] matrixArray) {
         if (matrixArray.length == 0) {
             throw new IllegalArgumentException("Raw matrix contains 0 row");
         }
@@ -39,35 +46,19 @@ class Matrix {
                 throw new IllegalArgumentException("Raw matrix is not rectangle");
             }
         }
-
-        this.storage = matrixArray;
     }
 
     public static Matrix multiply(Matrix left, Matrix right) {
         if (left == null || right == null) {
             throw new IllegalArgumentException("matrix is null");
         }
-
-        judgeMatrixDimension(left, right);
-
-//        int left[][] = { {3,2,3}, {5,9,8} };
-//        int right[][] = { {4,7}, {9,3}, {8,1} };
-//
-//        // 3 2 3   4 7
-//        // 5 9 8   9 3
-//        //         8 1
-//
-//        final int[][] expected = {
-//                {12 + 18 + 24, 21 + 6 + 3},
-//                {20 + 81 + 64, 35 + 27 + 8}
-//        };
         int leftRows = left.rows();
         int rightRows = right.rows();
 
         int leftColumns = left.columns();
         int rightColumns = right.columns();
 
-        if (leftRows != rightColumns || leftColumns != rightRows) {
+        if (leftColumns != rightRows) {
             throw new IllegalArgumentException();
         }
 
@@ -82,16 +73,6 @@ class Matrix {
         }
 
         return new Matrix(result);
-    }
-
-    private static void judgeMatrixDimension(Matrix left, Matrix right) {
-        int leftRow = left.rows();
-        int rightRow = right.rows();
-
-        int leftColumn = left.columns();
-        int rightColumn = right.columns();
-
-
     }
 
     // TODO: you can add some helper method if you like.

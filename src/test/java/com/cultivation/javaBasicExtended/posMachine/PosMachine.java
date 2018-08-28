@@ -1,8 +1,6 @@
 package com.cultivation.javaBasicExtended.posMachine;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -11,101 +9,96 @@ import java.util.*;
 @SuppressWarnings({"WeakerAccess", "unused", "RedundantThrows"})
 
 public class PosMachine {
-    private List<HashMap> itemList = new ArrayList();
+    private List<HashMap> productList = new ArrayList<>();
 
     public void readDataSource(Reader reader) throws IOException {
         if (reader == null) {
             throw new IllegalArgumentException();
         }
-        String dataSource = readerToString(reader);
-        stringToProductMap(dataSource);
+        String dataSource = convertReaderToString(reader);
+        convertStringToProductList(dataSource);
     }
 
-    private void stringToProductMap(String dataSource) throws IOException {
+    private void convertStringToProductList(String dataSource) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        JSONArray jsonArray = new JSONArray(dataSource);
 
-
-        for (int i = 0; i < jsonArray.length(); i++) {
+        List<HashMap> dataList = objectMapper.readValue(dataSource, List.class);
+        for(HashMap data : dataList){
             Map<String, Object> products = new HashMap<>();
 
-            JSONObject object = jsonArray.getJSONObject(i);
-            String id = object.getString("id");
-            String name = object.getString("name");
-            int price = object.getInt("price");
-            int count = 0;
+            products.put("id", data.get("id"));
+            products.put("name", data.get("name"));
+            products.put("price", data.get("price"));
 
-            products.put("id", id);
-            products.put("name", name);
-            products.put("price", price);
-            products.put("count", 1);
-
-            itemList.add((HashMap) products);
+            productList.add((HashMap) products);
         }
     }
 
-    private String readerToString(Reader reader) throws IOException {
-        int intValueOfChar;
+    private String convertReaderToString(Reader reader) throws IOException {
+        int intValue;
         StringBuilder targetString = new StringBuilder();
-        while ((intValueOfChar = reader.read()) != -1) {
-            targetString.append((char) intValueOfChar);
+        while ((intValue = reader.read()) != -1) {
+            targetString.append((char) intValue);
         }
         reader.close();
         return targetString.toString();
     }
 
     public String printReceipt(String barcodeContent) throws IOException {
-        StringBuilder receiptString = new StringBuilder();
-        String splitLine = "------------------------------------------------------------";
-        String line = System.lineSeparator();
-        receiptString.append("Receipts").append(line).append(splitLine).append(line);
-        String t = "%-32s%-11s%s";
-
-
-        String template = "Receipts" + line +
-                "------------------------------------------------------------" + line +
-
-                "------------------------------------------------------------" + line +
-                "Price: 0" + line;
-        if (barcodeContent == null || barcodeContent.equals("[]")) {
-            return template;
+        if (barcodeContent == null) {
+            barcodeContent = "[]";
         }
 
-        HashMap<Object, Object> map1 = getBarcodeMap(barcodeContent);
+        final String splitLine = "------------------------------------------------------------";
+        final String line = System.lineSeparator();
+        StringBuilder receiptString = new StringBuilder();
 
+        receiptString.append("Receipts").append(line).append(splitLine).append(line);
+        int totalPrice = buildReceipt(barcodeContent, receiptString, line);
+        receiptString.append(splitLine)
+                .append(line)
+                .append("Price: ")
+                .append(totalPrice)
+                .append(line);
+
+        return receiptString.toString();
+    }
+
+    private int buildReceipt(String barcodeContent, StringBuilder receiptString, String line) throws IOException {
+        String template = "%-32s%-11s%d";
         int totalPrice = 0;
 
-        for (Map.Entry<Object, Object> map : map1.entrySet()) {
+        HashMap<Object, Object> barcodeMap = getBarcodeMap(barcodeContent);
+        for (Map.Entry<Object, Object> map : barcodeMap.entrySet()) {
             HashMap item = getItem((String) map.getKey());
+
             int price = (int) item.get("price");
             int count = (int) map.getValue();
             totalPrice += price * count;
 
-            receiptString.append(String.format(t, item.get("name"), price, count)).append("\n");
+            receiptString.append(String.format(template, item.get("name"), price, count)).append(line);
         }
 
-        receiptString.append(splitLine).append(line).append("Price: ").append(totalPrice).append(line);
-        return receiptString.toString();
-
+        return totalPrice;
     }
 
     private HashMap<Object, Object> getBarcodeMap(String barcodeContent) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List idList = objectMapper.readValue(barcodeContent, List.class);
+        List barcodeList = objectMapper.readValue(barcodeContent, List.class);
 
-        LinkedHashMap<Object, Object> map1 = new LinkedHashMap<>();
+        LinkedHashMap<Object, Object> barcodeMap = new LinkedHashMap<>();
 
-        for (Object id : idList) {
-            Integer count = Collections.frequency(idList, id);
-            map1.put(id, count);
+        for (Object barcode : barcodeList) {
+            Integer count = Collections.frequency(barcodeList, barcode);
+            barcodeMap.put(barcode, count);
         }
-        return map1;
+        return barcodeMap;
     }
 
     private HashMap getItem(String barcode) {
-        for (HashMap item : itemList) {
+        for (HashMap item : productList) {
             if (barcode.equals(item.get("id"))) {
-               return item;
+                return item;
             }
         }
         throw new IllegalStateException();

@@ -1,10 +1,6 @@
 package com.cultivation.javaBasic.showYourIntelligence;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class Sequence implements Iterable<Integer> {
     private final Integer start;
@@ -35,7 +31,6 @@ class SequenceIterator implements Iterator<Integer> {
       this.start = start;
       this.end = end;
 
-//        throw new NotImplementedException();
         // --end-->
     }
 

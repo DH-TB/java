@@ -8,7 +8,6 @@ public class StringFormatException extends Exception {
         // TODO: please modify the following code to pass the test
         // <--start
         super(message);
-//        throw new NotImplementedException();
         // --end-->
     }
 

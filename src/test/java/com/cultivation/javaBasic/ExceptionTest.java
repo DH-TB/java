@@ -51,10 +51,14 @@ class ExceptionTest {
     @Test
     void should_use_the_try_pattern() {
         ClosableStateReference closableStateReference = new ClosableStateReference();
-        try (MyClosableType closable = new MyClosableType(closableStateReference))
+        try (MyClosableType closable = new MyClosableType(closableStateReference);
+                MyClosableType closable1 = new MyClosableType(closableStateReference))
         {
             assertFalse(closable.isClosed());
         }
+
+
+        //在这里调用close()方法
 
         // TODO: please modify the following code to pass the test
         // <--start
@@ -84,6 +88,21 @@ class ExceptionTest {
             if (value == 2) {
                 return 0;
             }
+        }
+
+    }
+
+
+    void testTryOrder(){
+        try{
+            System.out.println("try");
+            throw new IllegalArgumentException();
+        }
+        catch (IllegalArgumentException e){
+            System.out.println("catch");
+        }
+        finally {
+            System.out.println("finally");
         }
     }
 }
