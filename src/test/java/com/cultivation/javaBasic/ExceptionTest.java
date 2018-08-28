@@ -98,6 +98,9 @@ class ExceptionTest {
             logger.toArray());
     }
 
+//    在离开try块时将自动调用close()方法。该方法调用可以看做在finally块中，
+//    try括号内的资源会在try语句结束后自动释放，前提是这些可关闭的资源必须实现 java.lang.AutoCloseable 接口。
+
     @Test
     void should_get_method_name_in_stack_frame() {
         String methodName = StackFrameHelper.getCurrentMethodName();
