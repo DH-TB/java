@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+//
 class ExceptionTest {
     @Test
     void should_customize_exception() {
@@ -24,6 +25,7 @@ class ExceptionTest {
             assertEquals("the message", error.getMessage());
         }
     }
+    //定制
 
     @Test
     void should_customize_exception_continued() {
@@ -43,7 +45,7 @@ class ExceptionTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final int expectedResult = Integer.MAX_VALUE;
+        final int expectedResult = 0;
         // --end-->
 
         assertEquals(expectedResult, confusedResult);
@@ -60,11 +62,14 @@ class ExceptionTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Boolean> expected = Optional.empty();
+        final Optional<Boolean> expected = Optional.of(true);
         // --end-->
 
         assertEquals(expected.get(), closableStateReference.isClosed());
     }
+    
+//    在离开try块时将自动调用close()方法。该方法调用可以看做在finally块中，
+//    try括号内的资源会在try语句结束后自动释放，前提是这些可关闭的资源必须实现 java.lang.AutoCloseable 接口。
 
     @SuppressWarnings({"EmptyTryBlock", "unused"})
     @Test
