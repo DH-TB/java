@@ -2,7 +2,10 @@ package com.cultivation.javaBasic;
 
 import org.junit.jupiter.api.Test;
 
+import javax.print.attribute.standard.MediaSize;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,24 +19,30 @@ class DateTimeTest {
         // TODO: please measure the execution time of `delayOneSecond` using `Instant` and `Duration`
         // <--start
         // --end-->
+//        long startTime = System.nanoTime();
+//        delayOneSecond();
+//        long endTime = System.nanoTime();
+//        long duration = (endTime - startTime);
 
+        Instant start = Instant.now();
         delayOneSecond();
-
+        Instant end = Instant.now();
+        elapsed = Duration.between(start, end);
         // TODO: please measure the execution time of `delayOneSecond` using `Instant` and `Duration`
         // <--start
         // --end-->
 
         assertEquals(1, elapsed.getSeconds());
     }
+//    https://stackoverflow.com/questions/180158/how-do-i-time-a-methods-execution-in-java
 
     @Test
     void should_be_careful_when_adding_by_month() {
         LocalDate endOfJan = LocalDate.of(2016, 1, 31);
         LocalDate localDate = endOfJan.plusMonths(1);
-
         // TODO: please modify the following code to pass the test
         // <--start
-        final LocalDate expected = null;
+        final LocalDate expected = LocalDate.of(2016, 2, 29);
         // --end-->
 
         assertEquals(expected, localDate);
@@ -46,7 +55,7 @@ class DateTimeTest {
 
         // TODO: please get the next Tuesday or the same day if today is Tuesday
         // <--start
-        LocalDate nextTuesday = null;
+        LocalDate nextTuesday = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY));
         // --end-->
 
         final LocalDate expected = LocalDate.of(2016, 1, 5);
@@ -61,7 +70,7 @@ class DateTimeTest {
 
         // TODO: please give expected local time directly.
         // <--start
-        final LocalTime expected = null;
+        final LocalTime expected = LocalTime.of(6, 30);
         // --end-->
 
         assertEquals(expected, wakeUpTime);
@@ -76,7 +85,7 @@ class DateTimeTest {
 
         // TODO: please arrange the meeting to 7 days later.
         // <--start
-        ZonedDateTime actual = meeting;
+        ZonedDateTime actual = meeting.plusDays(7);
         // --end-->
 
         final ZonedDateTime expected = ZonedDateTime.of(
@@ -95,7 +104,7 @@ class DateTimeTest {
 
         // TODO: please format date time to ISO 8601 Date Time with Offset Information
         // <--start
-        String formatted = null;
+        String formatted = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(beijingTime);
         // --end-->
 
         final String expect = "2018-08-03T00:00:00+08:00";
@@ -110,7 +119,7 @@ class DateTimeTest {
 
         // TODO: please parse the date time string (ISO Offset format).
         // <--start
-        ZonedDateTime parsed = null;
+        ZonedDateTime parsed = ZonedDateTime.parse(expect, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         // --end-->
 
         ZonedDateTime expected = ZonedDateTime.of(

@@ -145,14 +145,7 @@ class GenericTest {
     @SuppressWarnings("unused")
     private static void swap(Pair<?> pair) {
         swapWithGeneric(pair);
-        getArrayList();
     }
-
-    private static void genericNumber(Pair<? super Integer> pair){
-        ArrayList<Integer> integers = new ArrayList<>();
-        ArrayList<? extends Number> integers1 = integers;
-    }
-
 
     private static <T> void swapWithGeneric(Pair<T> pair){
         T first = pair.getFirst();
@@ -160,6 +153,11 @@ class GenericTest {
 
         pair.setFirst(second);
         pair.setSecond(first);
+    }
+
+    private static void genericNumber(Pair<? super Integer> pair){
+        ArrayList<Integer> integers = new ArrayList<>();
+        ArrayList<? extends Number> integers1 = integers;
     }
 
     private static <T> ArrayList getArrayList(){

@@ -16,6 +16,7 @@ class LambdaTest {
     void should_apply_to_interface_with_single_abstract_method() {
         StringFunc lambda = () -> "Hello";
 
+        // () -> "Hello" 相当于，实现了StringFunc接口
 
         // TODO: please modify the following code to pass the test
         // <--start
@@ -52,7 +53,7 @@ class LambdaTest {
     void should_bind_to_constructor() {
         // TODO: please bind lambda to constructor of ArrayList<Integer>
         // <--start
-        GenericFunc<ArrayList<Integer>> lambda = ArrayList::new;
+        GenericFunc<ArrayList<Integer>> lambda = () -> new ArrayList<>();
         // --end-->
 
 

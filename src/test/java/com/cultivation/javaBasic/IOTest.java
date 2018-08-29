@@ -3,14 +3,16 @@ package com.cultivation.javaBasic;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.TempDirectory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 //
 @ExtendWith(TempDirectory.class)
 class IOTest {
@@ -27,16 +29,37 @@ class IOTest {
     private static void writeAllText(String message, Path filePath, Charset charset) throws IOException {
         // TODO: please implement the method to writer text to file using `PrintWriter`.
         // <--start
-        throw new NotImplementedException();
+        PrintWriter printWriter = null;
+        try {
+            printWriter = new PrintWriter(filePath.toString(), charset.name());
+            printWriter.print(message);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        printWriter.close();
         // --end-->
     }
 
+//    append print
 
     @SuppressWarnings({"SameParameterValue", "unused", "RedundantThrows"})
     private static String readAllText(Path path, Charset charset) throws IOException {
         // TODO: please implement the method to read text from file using `Files` helper methods.
         // <--start
-        throw new NotImplementedException();
+        List<String> list = null;
+        try {
+            list = Files.readAllLines(path, charset);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (Object file : list) {
+            result.append(file);
+        }
+        result.append(System.lineSeparator());
+        return result.toString();
         // --end-->
     }
 
@@ -45,11 +68,22 @@ class IOTest {
     void should_be_able_to_write_and_read_binary_data_to_file(@TempDirectory.TempDir Path dir) throws Exception {
         Path filePath = dir.resolve("sample.bin");
 
+        System.out.println(dir);
+        System.out.println(filePath);
         final int firstValue = 2018;
         final double pi = 3.14;
 
         // TODO: please write `firstValue` and `pi` to `filePath`
         // <--start
+        try {
+            DataOutputStream out = new DataOutputStream(new FileOutputStream(filePath.toString()));
+            out.writeInt(firstValue);
+            out.writeDouble(pi);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // --end-->
 
         int actualFirstValue = 0;
@@ -57,6 +91,15 @@ class IOTest {
 
         // TODO: please read `actualFirstValue` and `actualPi` from `filePath`
         // <--start
+        try {
+            DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(filePath.toString())));
+
+            actualFirstValue = in.readInt();
+            actualPi = in.readDouble();
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // --end-->
 
         assertEquals(firstValue, actualFirstValue);
@@ -64,6 +107,7 @@ class IOTest {
     }
 }
 
+//http://coolszy.iteye.com/blog/483147
 /*
  * - Do you think the `PrintWriter` will close the under-laying writer when it is closed? Why?
  * - Do you think it is possible to detect encodings from a given text file?

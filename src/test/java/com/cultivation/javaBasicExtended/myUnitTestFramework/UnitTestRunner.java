@@ -4,8 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 class UnitTestRunner {
     UnitTestRunningResult run(Class<?> unitTestClass) throws IllegalAccessException, InstantiationException {
@@ -47,15 +49,10 @@ class UnitTestRunner {
     }
 
     private Method[] getAnnotationMyTestMethod(Class<?> unitTestClass) {
-        Method[] methods = unitTestClass.getMethods();
+        Method[] methods = unitTestClass.getDeclaredMethods();
 
-        List arrayList = new ArrayList<>();
-        for (Method method : methods) {
-            if (method.getAnnotation(MyTest.class) != null) {
-                arrayList.add(method);
-            }
-        }
-        return (Method[]) arrayList.toArray(new Method[0]);
+        return Arrays.stream(methods).filter(method -> method.getAnnotation(MyTest.class) != null).toArray(Method[]::new);
+
     }
 
     // TODO: You can add additional methods if you want

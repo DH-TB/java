@@ -9,6 +9,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,7 +25,7 @@ class StreamingTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        Stream<String> wordStream = words.stream();
+        Stream<String> wordStream = words.stream().filter(a->a.contains("o"));
         // --end-->
         {
             assertIterableEquals(
@@ -63,6 +64,7 @@ class StreamingTest {
         }
     }
 
+
     @SuppressWarnings("ConstantConditions")
     @Test
     void should_be_able_to_generate_infinite_stream_with_same_items() {
@@ -76,6 +78,31 @@ class StreamingTest {
         {
             assertEquals("Echo", infiniteEchos.skip(10000).findFirst().get());
         }
+    }
+
+
+    //filter skip limit map 不会执行,遇到 get()/ toArray() 获取值的时候，才会执行
+
+    @Test
+    void should_generate_string_array() {
+        String[] array = Stream.generate(() -> "Echo").toArray((length) -> new String[length]);
+        assertEquals(array.getClass().getComponentType(), String.class);
+    }
+
+    @Test
+    void should_test_generate_times() {
+        Time times = new Time();
+        Stream<String> infiniteEchos = Stream.generate(() -> {
+            times.time++;
+            return "Echo";
+        });
+        Stream<String> skip = infiniteEchos.skip(10000);
+        assertEquals(0,times.time);
+
+    }
+
+    class Time {
+        int time = 0;
     }
 
 //    generate(Supplier<T> s)
@@ -299,8 +326,11 @@ class StreamingTest {
         // TODO: please add the upper-cased value to result if `optional` is present in `Consumer<Optional<String>>`
         // TODO: implementation.
         // <--start
-        Consumer<Optional<String>> optionalConsumer = null;
-//        Consumer<Optional<String>> optionalConsumer = (option) -> option.isPresent();
+        Consumer<Optional<String>> optionalConsumer = (option) -> {
+            if (option.isPresent()) {
+                result.add(option.get().toUpperCase());
+            }
+        };
 
         // --end-->
 
@@ -321,7 +351,7 @@ class StreamingTest {
         // TODO: please add the upper-cased value to `result` list if optional is present. Then return the boolean
         // TODO: mapping result of `result.add`.
         // <--start
-        Function<Optional<String>, Optional<Boolean>> mapping = (option) -> option.map(s -> result.add(s.toUpperCase()));
+        Function<Optional<String>, Optional<Boolean>> mapping = (option) -> option.map(s -> result.add(option.get().toUpperCase()));
         // --end-->
 
         Optional<Boolean> mappingResult = mapping.apply(optional);
@@ -367,7 +397,9 @@ class StreamingTest {
         // TODO: please implement toList collector using `stream.collect`. You cannot use existing `toList` collector.
         // <--start
 //        ArrayList<String> list = (ArrayList<String>) stream.collect(Collectors.toList());
-        ArrayList<String> list = stream.collect(Collector.of(ArrayList::new, List::add,
+        ArrayList<String> list = stream.collect(Collector.of(
+                () -> new ArrayList<>(),
+                (s, a) -> s.add(a),
                 (left, right) -> {
                     left.addAll(right);
                     return left;
@@ -382,6 +414,11 @@ class StreamingTest {
                 list
         );
     }
+//  这个参数封装了supplier, accumulator, 和 combiner 3个操作。
+//。首先创建一个集合容器；其次将元素放入集合容器中，最后进行归集操作conbiner，将多个结果集合合并为一个结果集合输出。
+//    https://blog.csdn.net/qq_36372507/article/details/78818076
+//    http://www.java2s.com/Tutorials/Java/Stream_How_to/Stream_Collector/Create_collector_from_supplier_accumulator_combiner_and_finisher.htm
+
 
     @SuppressWarnings({"ConstantConditions", "unused"})
     @Test
@@ -394,8 +431,10 @@ class StreamingTest {
 
         // TODO: please implement toMap collector using `stream.collect`. You cannot use existing `toMap` collector.
         // <--start
+
         HashMap<String, Integer> map = null;
-//        HashMap<String, Integer> map = stream.collect(Collector.of());
+
+
         // --end-->
 
         assertEquals(2, map.size());
@@ -437,8 +476,8 @@ class StreamingTest {
         // <--start
         Map<String, List<Integer>> map = stream.collect(
                 Collectors.groupingBy(
-                        KeyValuePair::getKey,
-                        Collectors.mapping(KeyValuePair::getValue, Collectors.toList())
+                        s -> s.getKey(),
+                        Collectors.mapping(s -> s.getValue(), Collectors.toList())
                 ));
         // --end-->
 
@@ -459,13 +498,14 @@ class StreamingTest {
         // TODO: implement grouping collector using `stream.collect`. You should use `Collectors.groupingBy` and
         // TODO: downstream collector.
         // <--start
-        Map<String, Long> map = stream.collect(Collectors.groupingBy(KeyValuePair::getKey, Collectors.counting()));
+        Map<String, Long> map = stream.collect(Collectors.groupingBy(s -> s.getKey(), Collectors.counting()));
         // --end-->
 
         assertEquals(2, map.size());
         assertEquals(2, map.get("Harry").longValue());
         assertEquals(1, map.get("Bob").longValue());
     }
+//    参数downstream还是一个收集器Collector对象
 
     @SuppressWarnings({"ConstantConditions", "unused"})
     @Test
@@ -479,7 +519,11 @@ class StreamingTest {
         // TODO: implement grouping collector using `stream.collect`. You should use `Collectors.groupingBy` and
         // TODO: downstream collector.
         // <--start
-        Map<String, Integer> map = null;
+        Map<String, Integer> map = stream.collect(
+                Collectors.groupingBy(KeyValuePair::getKey,
+                        Collectors.summingInt((KeyValuePair::getValue))
+                )
+        );
         // --end-->
 
         assertEquals(2, map.size());
@@ -512,8 +556,10 @@ class StreamingTest {
 
         // TODO: please calculate the total number of characters using `reduce`.
         // <--start
-        Integer total = words.stream().reduce(0, (sum, num) -> sum + num.length(), (total1, total2) -> total1 + total2);
-//        Integer total = words.stream().mapToInt(String::length).sum();
+
+//      Integer total = words.stream().mapToInt(String::length).sum();
+        Integer total = words.stream().mapToInt(String::length).reduce((a, b) -> a + b).orElse(0);
+
         // --end-->
 
         assertEquals(15, total.intValue());
