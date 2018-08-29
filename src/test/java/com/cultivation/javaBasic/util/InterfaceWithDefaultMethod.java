@@ -8,5 +8,4 @@ public interface InterfaceWithDefaultMethod {
     default String getTheTruthOfTheUniverse() {
         return "42";
     }
-
 }

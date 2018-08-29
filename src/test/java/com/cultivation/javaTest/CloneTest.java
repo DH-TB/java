@@ -13,7 +13,7 @@ class CloneTest {
 
         assertTrue(array[0] == storage[0]);
         assertSame(array[0], storage[0]);
-        // 参数是Object int会转为Integer 所以比较的是经过转换dhou
+        // 参数是Object int会转为Integer 所以比较的是经过转换的
         assertFalse(array == storage);
     }
 

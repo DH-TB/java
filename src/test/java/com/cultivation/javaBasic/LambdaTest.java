@@ -157,7 +157,7 @@ class LambdaTest {
 
     @Test
     void should_new_object(){
-        Supplier supplier = Object::new;
+        Supplier supplier = () -> new Object();
 
         System.out.println(Object.class);
         System.out.println(String.class.getName());
