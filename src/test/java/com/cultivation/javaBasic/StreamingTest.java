@@ -427,17 +427,24 @@ class StreamingTest {
         Stream<KeyValuePair<String, Integer>> stream = Stream.of(
                 new KeyValuePair<>("Harry", 2002),
                 new KeyValuePair<>("Bob", 2014),
-                new KeyValuePair<>("Harry", 2033)
-        ).parallel();
+                new KeyValuePair<>("Harry", 2033),
+                new KeyValuePair<>("Bobs", 2094)
+
+                ).parallel();
 
         // TODO: please implement toMap collector using `stream.collect`. You cannot use existing `toMap` collector.
         // <--start
 
+//        Map<String, Integer> map = stream.collect(Collectors.toMap(KeyValuePair->KeyValuePair.getKey(),KeyValuePair->KeyValuePair.getValue()));
         HashMap<String, Integer> map = stream.collect(Collector.of(
                 () -> new HashMap<>(),
-                (s, a) -> s.put(a.getKey(), a.getValue()),
+                (s, a) -> {
+                    s.put(a.getKey(), a.getValue());
+                },
                 (left, right) -> {
                     left.putAll(right);
+                    System.out.println(left);
+
                     return left;
                 }
         ));
