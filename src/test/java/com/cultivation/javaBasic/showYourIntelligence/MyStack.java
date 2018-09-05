@@ -33,7 +33,6 @@ public class MyStack {
 //      System.out.println(Arrays.toString(storage));
 
 
-
         // TODO: Please push the value into the storage here.
 
         // <--start

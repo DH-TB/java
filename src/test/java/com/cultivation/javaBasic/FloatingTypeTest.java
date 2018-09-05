@@ -10,17 +10,23 @@ class FloatingTypeTest {
     @Test
     void should_not_get_rounded_result_if_convert_floating_number_to_integer() {
         final float floatingPointNumber = 2.75f;
-        final int integer = (int) floatingPointNumber;
+        final Double integer = (double) floatingPointNumber;
 
         // TODO: Please change the result to pass the test.
         // <!--start
         double a = Math.pow(2, 30);
-        final int expected = (int) (Integer.MAX_VALUE / a) + 1;
+        final Double expected = 2.75;
         // --end-->
 
         assertEquals(expected, integer);
     }
 
+    @Test
+    void should_transfer() {
+        int actual = 1;
+        byte expect = (byte) actual;
+        assertEquals(expect, actual);
+    }
     // 圆 循环
     //   值为 2^31－1 的常量，它表示 int 类型能够表示的最大值。
     //https://doc.yonyoucloud.com/doc/jdk6-api-zh/java/lang/Integer.html
@@ -40,7 +46,16 @@ class FloatingTypeTest {
     //https://www.cnblogs.com/zhisuoyu/p/5314541.html
 
     @Test
-    void should_get_NaN(){
+    void should() {
+
+        assertEquals(Double.NaN, Double.NaN);
+        assertFalse(Double.NaN == Double.NaN);
+        assertFalse(0/0.0 == 0/0.0);
+
+    }
+
+    @Test
+    void should_get_NaN() {
         assertTrue(Double.isNaN(0 / 0.0));
     }
 
@@ -71,7 +86,16 @@ class FloatingTypeTest {
         assertEquals(3L, rounded);
     }
 
-    //floor //向下取整
+    @Test
+    void should_test_math_round() {
+        double doubleNumber = 2.49;
+        long actual = Math.round(doubleNumber);
+
+        assertEquals(2, actual);
+    }
+
+// 只根据小数点后一位来判断
+//floor //向下取整
     //ceil //向上取整
     //round //四舍五入取整
 

@@ -124,6 +124,7 @@ class ObjectTest {
 
         assertEquals(expected, actual);
     }
+    //编译时，确定重载类型
 
     @Test
     void should_choose_the_most_specific_overload() {
@@ -133,6 +134,7 @@ class ObjectTest {
 
         String actual = fixture.methodWithTwoParameters(name, (Number) integer);
 
+//        String actual = fixture.methodWithTwoParameters(name, integer);
         // TODO: please modify the following code to pass the test. You should write the result directly.
         // <--start
         final String expected = "methodWithTwoParameters(String, Number)";
@@ -140,6 +142,8 @@ class ObjectTest {
 
         assertEquals(expected, actual);
     }
+
+
 
     @Test
     void should_calling_another_constructor() {
@@ -163,8 +167,10 @@ class ObjectTest {
         // TODO: please modify the following code to pass the test
         // <--start
         final String[] expected = {
-                "Field Initializer",
                 "Initialization Block",
+                "Field Initializer",
+                "Initialization Block another",
+                "Field Initializer another",
                 "Constructor with argument",
                 "Default constructor"
         };
@@ -175,11 +181,11 @@ class ObjectTest {
 
     @Test
     void should_get_message_of_var_length_parameters() {
-        final String message = getMessageOfVarLengthParameters(1, 2, 3, "Hello");
+        final String message = getMessageOfVarLengthParameters(1, 2, 3);
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = "1\n2\n3\nHello\n";
+        final String expected = "1\n2\n3\n";
         // --end-->
 
         assertEquals(expected, message);
@@ -194,7 +200,6 @@ class ObjectTest {
         // TODO: please modify the following code to pass the test
         // <--start
         final String expected = "1\n2\n3\n";
-
         // --end-->
 
         assertEquals(expected, message);

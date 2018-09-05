@@ -2,11 +2,11 @@ package com.cultivation.javaBasic;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 //5
 class StringTest {
@@ -22,23 +22,21 @@ class StringTest {
         // <--start
         final Optional<Boolean> areSame = Optional.of(false);
         // --end-->
-
         assertEquals("The new string", modifiedString);
         assertEquals(areSame.get(), originalString == modifiedString);
     }
 
     @Test
-    void should_test_equal(){
+    void should_test_equal() {
         String string1 = "str";
         String postfix = "r";
         String string2 = "st" + postfix;
 
-        assertEquals(true,string1 == string2);
+        assertEquals(true, string1 == string2);
 
     }
     //不可变的
     //https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html
-
 
 
     @SuppressWarnings({"StringEquality", "ConstantConditions"})
@@ -99,6 +97,7 @@ class StringTest {
         // TODO: Take part of the original string according to expectation.
         // <--start
         final String partOfString = originalString.substring(5, 7);
+        // 取头不取尾，左闭右开
         // --end-->
 
         final String expectedString = "is";
@@ -109,7 +108,7 @@ class StringTest {
     /*
      * Questions on take string apart.
      *
-     * - What if the input arguments is out of range of the string?
+     * - What if the input arguments is out of range of the string?  //StringIndexOutOfBoundsException
      * - What will happen if the the starting index is greater than the ending index?
      * - What will happen if the input string is of null reference?
      */
@@ -153,32 +152,75 @@ class StringTest {
         final String char2 = "-";
         final String char3 = " ";
 
-        builder.append(buildChar(char2));
-        builder.append(buildChar(char3));
-        builder.append(buildChar(char2));
+        builder.append(buildChar(char2, height));
+        builder.append(buildChar(char3, height));
+        builder.append(buildChar(char2, height));
+
 
         // --End-->
 
-        final String expected =
-                "|---|\n" + "|   |\n" +
-                        "|---|\n";
+        final String expected = "|---|\n" +
+                "|   |\n" +
+                "|---|\n";
 
         assertEquals(expected, builder.toString());
     }
 
-    private StringBuilder buildChar(String char2) {
+    private StringBuilder buildChar(String char2, int height) {
         StringBuilder builder = new StringBuilder();
 
         final String char1 = "|";
 
         builder.append(char1);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < height; i++) {
             builder.append(char2);
         }
         builder.append(char1).append("\n");
         return builder;
     }
 
+    @Test
+    void should_create_ascii_art1() {
+        final int width = 5;
+        final int height = 3;
+
+        final String expected = "|---|\n" +
+                "|   |\n" +
+                "|---|\n";
+
+        StringBuilder stringBuilder = getChar(height, width);
+
+        assertEquals(expected, stringBuilder.toString());
+    }
+
+    private StringBuilder getChar(int height, int width) {
+        StringBuilder builder = new StringBuilder();
+
+        final String char1 = "|";
+
+        for (int row = 0; row < height; row++) {
+            builder.append(char1);
+
+            getColElement(width, builder, row);
+
+            builder.append(char1);
+            builder.append("\n");
+        }
+        return builder;
+    }
+
+    private void getColElement(int width, StringBuilder builder, int row) {
+        final String char2 = "-";
+        final String char3 = " ";
+
+        for (int j = 0; j < width - 2; j++) {
+            if (row == 1) {
+                builder.append(char3);
+            } else {
+                builder.append(char2);
+            }
+        }
+    }
 
     @SuppressWarnings("unused")
     @Test
@@ -192,11 +234,12 @@ class StringTest {
         for (int i = 0; i < text.length(); i++) {
             sum += text.charAt(i);
         }
+
         assertEquals(3655, sum);
     }
 
     @Test
-    void should_transfer_when_calculate(){
+    void should_transfer_when_calculate() {
         final String text = "a";
         double sum = text.charAt(0);
         System.out.println(sum);
@@ -235,6 +278,20 @@ class StringTest {
         assertEquals("654321", reversed);
     }
 
+    @Test
+    void should_test_final_char_array_can_assign_value() {
+        final char[] array = new char[]{'1', '2', '3', '4', '5', '6'};
+
+        for (int i = 0; i < array.length / 2; i++) {
+            char temp = array[i];
+            array[i] = array[array.length - i - 1];
+            array[array.length - i - 1] = temp;
+        }
+
+        final char[] expectArray = new char[]{'6', '5', '4', '3', '2', '1'};
+        assertArrayEquals(array, expectArray);
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Test
     void should_compare_string_with_different_cases() {
@@ -259,6 +316,9 @@ class StringTest {
     void should_get_code_point_count() {
         final String withSurrogatePairs =
                 new String(Character.toChars(0x20B9F)) + " is a character that you may not know";
+
+        // 0x20B9F 20位，
+        // 一个char，2个字节，16位，放不下，需要占用两个char,但实际是一个codePoint
 
         // TODO: please modify the following code to pass the test
         // <--start
@@ -306,19 +366,43 @@ class StringTest {
         // TODO: please implement the method to the pass the test
         // <--start
 
-        int codePointLength = Character.codePointCount(withSurrogatePairs, 0, withSurrogatePairs.length());
-        int[] codePointArray = new int[codePointLength];
-        int count = 0;
+        return withSurrogatePairs.codePoints().toArray();
 
-        for (int i = 0; i < withSurrogatePairs.length();) {
-            int character  = withSurrogatePairs.codePointAt(i);
-            codePointArray[count++] = character;
-            i += Character.charCount(character);
-        }
-
-        return codePointArray;
+//        int codePointLength = Character.codePointCount(withSurrogatePairs, 0, withSurrogatePairs.length());
+//        int[] codePointArray = new int[codePointLength];
+//        int count = 0;
+//
+//        for (int i = 0; i < withSurrogatePairs.length(); ) {
+//            int character = withSurrogatePairs.codePointAt(i);
+//            codePointArray[count++] = character;
+//            i += Character.charCount(character);
+//        }
+//
+//        return codePointArray;
         // --end-->
     }
+
+    @Test
+    void name() {
+        boolean[] list = new boolean[10];
+        // all ten elements are assigned to false
+
+        Boolean[] list1 = new Boolean[10];
+        // all ten elements are assigned to null (default Object/Boolean value)
+
+        char[] chars = new char[10];
+        // '\u0000'
+
+        String[] strings = new String[1];
+        // null
+        String string = strings[0];
+
+        int[] ints = new int[2];
+        // 0
+
+        assertEquals(string, null);
+    }
+//    https://stackoverflow.com/questions/5389200/what-is-a-java-strings-default-initial-value
 
     /*
      * - List other string format conversion chars.

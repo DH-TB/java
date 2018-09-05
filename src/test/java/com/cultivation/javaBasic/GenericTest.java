@@ -34,23 +34,6 @@ class GenericTest {
         assertEquals("Good", middle);
     }
 
-    private String[] toStringArray(int length){
-        String[] array = new String[length];
-        return array;
-    }
-
-    private <T> T[] toArray(int length, Generic<T> instance){
-        return instance.returnArray(length);
-    }
-
-
-    @Test
-    void should_test_T_array(){
-        String[] stringArray = toArray(5, (length) -> new String[length]);
-        assertEquals(5, stringArray.length);
-
-        assertEquals(stringArray.getClass().getComponentType(), String.class);
-    }
 
     @Test
     void should_specify_a_type_restriction_on_typed_parameters() {
@@ -78,10 +61,10 @@ class GenericTest {
     }
 
     @Test
-    void should_can_transfer_type(){
+    void should_can_transfer_type() {
         KeyValuePair<String, Integer> pair = new KeyValuePair<>("name", 2);
 
-        KeyValuePair keyValuePair = new KeyValuePair<>(new Object(),new Object());
+        KeyValuePair keyValuePair = new KeyValuePair<>(new Object(), new Object());
         KeyValuePair<String, Integer> havePair = keyValuePair;
 
     }
@@ -147,7 +130,7 @@ class GenericTest {
         swapWithGeneric(pair);
     }
 
-    private static <T> void swapWithGeneric(Pair<T> pair){
+    private static <T> void swapWithGeneric(Pair<T> pair) {
         T first = pair.getFirst();
         T second = pair.getSecond();
 
@@ -155,17 +138,17 @@ class GenericTest {
         pair.setSecond(first);
     }
 
-    private static void genericNumber(Pair<? super Integer> pair){
+    private static void genericNumber(Pair<? super Integer> pair) {
         ArrayList<Integer> integers = new ArrayList<>();
         ArrayList<? extends Number> integers1 = integers;
     }
 
-    private static <T> ArrayList getArrayList(){
+    private static <T> ArrayList getArrayList() {
         ArrayList<T> list = new ArrayList<>();
         return list;
     }
 
-    private static <T> ArrayList getArrayListWithParameter(){
+    private static <T> ArrayList getArrayListWithParameter() {
         ArrayList<T> list = new ArrayList<>();
         return list;
     }
@@ -173,7 +156,27 @@ class GenericTest {
     // <--start
 
     // --end-->
+
+    <T> T[] toArray(int length, Generic<T> generic) {
+        return generic.returnArray(length);
+
+    }
+
+    @Test
+    void should_return_array() {
+        String[] stringArray = toArray(5, (length) -> new String[length]);
+
+        assertEquals(5, stringArray.length);
+//
+        assertEquals(stringArray.getClass().getComponentType(), String.class);
+    }
 }
+
+interface Generic<T> {
+    T[] returnArray(int length);
+}
+
+
 
 /*
  * - Can you give an example when you have to specify a typed parameter in generic method call?
@@ -206,6 +209,3 @@ class GenericTest {
  * - Please describe the wildcard generic type.
  */
 
-interface Generic<T>{
-    T[] returnArray(int length);
-}

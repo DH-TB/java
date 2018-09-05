@@ -3,6 +3,8 @@ package com.cultivation.javaBasic;
 import com.cultivation.javaBasic.showYourIntelligence.MyStack;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class ArrayTest {
@@ -24,5 +26,13 @@ class ArrayTest {
                 array
         );
     }
+
+    @Test
+    void should_change_array_size(){
+        int[] intArray = new int[10];
+//        intArray.length = 11;
+        intArray = new int[11];
+    }
 }
+
 

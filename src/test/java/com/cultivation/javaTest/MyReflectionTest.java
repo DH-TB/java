@@ -1,6 +1,5 @@
 package com.cultivation.javaTest;
 
-import com.cultivation.javaTest.Reflection;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;

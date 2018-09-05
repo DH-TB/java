@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class BooleanOperatorsTest {
 
@@ -81,4 +82,37 @@ class BooleanOperatorsTest {
 
         assertEquals(expected, ~value);
     }
+
+    @Test
+    void should_return_operate_priority_not_more_than_and() {
+        final int value = 0x0000_0000;
+        final int mask = 0x0000_abcd;
+
+        int actual = ~value & mask;
+        int expectNotGreaterAnd = 0x0000_abcd;
+        int expectAndGreaterNot = 0xffff_ffff;
+
+        assertEquals(expectNotGreaterAnd, actual);
+        assertNotEquals(expectAndGreaterNot, actual);
+    }
+    // ~ > &
+
+    @Test
+    void should_test_operate_priority1() {
+        final int value = 0xffff_0000;
+        final int mask = 0x0000_ffff;
+        final int another = 0x1111_1111;
+
+        int actual = another | value & mask;
+        int actualOrderNotMatter = value & mask | another;
+
+        int expectAndGreaterOr = 0x1111_1111;
+        int expectOrGreaterAnd = 0x0000_1111;
+
+        assertNotEquals(expectOrGreaterAnd, actual);
+        assertEquals(expectAndGreaterOr, actual);
+        assertEquals(expectAndGreaterOr, actualOrderNotMatter);
+
+    }
+    // & > |
 }

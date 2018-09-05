@@ -22,7 +22,5 @@ public class AnonymousClassUpdateField {
 
         };
         runnable.run();
-
-
     }
 }

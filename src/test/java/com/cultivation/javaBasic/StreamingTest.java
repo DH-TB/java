@@ -402,6 +402,7 @@ class StreamingTest {
                 () -> new ArrayList<>(),
                 (s, a) -> s.add(a),
                 (left, right) -> {
+                    System.out.println(right);
                     left.addAll(right);
                     return left;
 
@@ -430,7 +431,7 @@ class StreamingTest {
                 new KeyValuePair<>("Harry", 2033),
                 new KeyValuePair<>("Bobs", 2094)
 
-                ).parallel();
+        ).parallel();
 
         // TODO: please implement toMap collector using `stream.collect`. You cannot use existing `toMap` collector.
         // <--start
@@ -443,8 +444,6 @@ class StreamingTest {
                 },
                 (left, right) -> {
                     left.putAll(right);
-                    System.out.println(left);
-
                     return left;
                 }
         ));
@@ -466,36 +465,12 @@ class StreamingTest {
                 new KeyValuePair<>("Harry", 2002),
                 new KeyValuePair<>("Bob", 2014),
                 new KeyValuePair<>("Harry", 2033)
-        ).parallel();
+        );
 
         // TODO: implement grouping collector using `stream.collect`. You cannot use existing `groupingBy` collector.
         // <--start
-//        HashMap<String, List<Integer>> map = null;
-        HashMap<String, List<Integer>> map = stream.collect(
-                Collector.of(
-                        HashMap::new,
-                        (acc, item) -> {
-                            if (acc.containsKey(item.getKey())) {
-                                List<Integer> values = acc.get(item.getKey());
-                                values.add(item.getValue());
-                            } else {
-                                ArrayList<Integer> values = new ArrayList<>();
-                                values.add(item.getValue());
-                                acc.put(item.getKey(), values);
-                            }
-                        },
-                        (left, right) -> {
-                            right.forEach((key, value) -> {
-                                if (left.containsKey(key)) {
-                                    left.get(key).addAll(value);
-                                } else {
-                                    left.put(key, value);
-                                }
-                            });
 
-                            return left;
-                        })
-        );
+        HashMap<String, List<Integer>> map = null;
         // --end-->
 
         assertEquals(2, map.size());
@@ -598,6 +573,11 @@ class StreamingTest {
         // <--start
 
 //      Integer total = words.stream().mapToInt(String::length).sum();
+//        Integer total = words.stream().reduce(
+//                        0,
+//                        (prev, word) -> prev + word.length(),
+//                        (total1, total2) -> total1 + total2);
+//
         Integer total = words.stream().mapToInt(String::length).reduce((a, b) -> a + b).orElse(0);
 
         // --end-->

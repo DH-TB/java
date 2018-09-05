@@ -11,6 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UnitTestRunnerTest {
+
     private UnitTestRunningResult runTest(Class<?> unitTestClass) throws InstantiationException, IllegalAccessException {
         UnitTestRunner runner = new UnitTestRunner();
         return runner.run(unitTestClass);

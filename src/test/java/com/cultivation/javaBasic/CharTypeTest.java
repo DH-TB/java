@@ -27,6 +27,7 @@ class CharTypeTest {
         assertEquals(EscapedChars.SINGLE_QUOTE.getValue(), singleQuote);
         assertEquals(EscapedChars.BACKSLASH.getValue(), backslash);
     }
+
 //    UTF-8 1 / 2 / 3
 //    UTF-16 2 / 4
 //    UTF-32 4
@@ -38,6 +39,9 @@ class CharTypeTest {
      * - Why there are many methods in Character class accepting an int parameter rather than char?
      */
 }
+
+//unicode是标准，utf是实现编码方式
+//最初ASCII 表示不了
 
 // String的每一个char其实都可以用一个Unicode编码表示，
 //一个完整的Unicode字符叫CodePoint

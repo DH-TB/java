@@ -13,7 +13,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//
 @ExtendWith(TempDirectory.class)
 class IOTest {
     @Test
@@ -68,8 +67,6 @@ class IOTest {
     void should_be_able_to_write_and_read_binary_data_to_file(@TempDirectory.TempDir Path dir) throws Exception {
         Path filePath = dir.resolve("sample.bin");
 
-        System.out.println(dir);
-        System.out.println(filePath);
         final int firstValue = 2018;
         final double pi = 3.14;
 
@@ -106,6 +103,7 @@ class IOTest {
         assertEquals(pi, actualPi);
     }
 }
+//
 
 //http://coolszy.iteye.com/blog/483147
 /*

@@ -3,8 +3,7 @@ package com.cultivation.javaBasic;
 import org.junit.jupiter.api.Test;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 //
 class IntegerTypeTest {
@@ -24,6 +23,34 @@ class IntegerTypeTest {
         assertEquals(minimumSymbol, minimum);
     }
 
+    @Test
+    void should_be_negative() {
+        final int maximum = 0x7fffffff;
+        final int minimum = 0x80000000;
+        int one = 0x0000001;
+        int negativeOne = 0x80000001;
+
+        for (int i = one; i < maximum; i++) {
+            assertTrue(i > 0);
+        }
+
+        for (int i = negativeOne; i > minimum; i--) {
+            assertTrue(i < 0);
+        }
+    }
+
+    @Test
+    void should_test_negative() {
+        for (int i = Integer.MIN_VALUE; i < 0; i++) {
+            assertEquals(1, i >>> 31);
+        }
+
+        int one = 1;
+        for (int i = 0; i < 31; i++) {
+            assertTrue((one << 1) > 0);
+        }
+    }
+
     //https://blog.csdn.net/claram/article/details/76682125
 
     //应该得到原始 int 类型的范围
@@ -35,8 +62,10 @@ class IntegerTypeTest {
     @Test
     void should_get_range_of_primitive_short_type() {
         final short maximum = 32767;
-        final short minimum = -32768;
+        final short minimum = (short) 0x8000;
 
+        //2^15-1
+        //-2^15
         // TODO: You should not write concrete number here. Please find a property or constant instead.
         // <!--start
         final short maximumSymbol = Short.MAX_VALUE;
@@ -45,6 +74,7 @@ class IntegerTypeTest {
 
         assertEquals(maximumSymbol, maximum);
         assertEquals(minimumSymbol, minimum);
+        assertTrue(0x80001000 < 0);
     }
 
 
@@ -109,6 +139,10 @@ class IntegerTypeTest {
 
         assertEquals(expectedResult, theNumberWillUnderflow);
     }
+    // Integer.MIN_VALUE 加 -1 -1的补码全都是1（ 1111_1111）
+    // 100000 加
+    // 111111
+    //
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
@@ -137,14 +171,13 @@ class IntegerTypeTest {
         final double expectedResult2 = 3.0;
         // --end-->
 
-//        assertEquals(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, +1.0E-05);
-
+//        assertEquals(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         assertEquals(expectedResult1, result1, +1.0E-05);
         assertEquals(expectedResult2, result2, +1.0E-05);
     }
 
     // http://junit.sourceforge.net/javadoc/org/junit/Assert.html#assertEquals(double,%20double,%20double)
-    //0.00001
+    //误差范围 绝对值小于 0.00001 都可以
 
 
     @Test
@@ -159,10 +192,21 @@ class IntegerTypeTest {
 
         assertEquals(expected, smallerInteger);
     }
-    //    截取
+
+    //    截取 不保留符号位
     //    基本原则就是整数按字节进行截断，以32位操作系统为例，int是32位的，short是int的一半是int的低16位，char是int的最低8位
     //    强制类型转换的原理: 当将高位变量转换为低位是,只会取高位的后几位直接作为低位的值.
     //    0x0123_4567 = 0b(0000 0001 0010 0011 _ 0100 0101 0110 0111 ) 2^0+2^1+2^2+2^5+2^6+2^8+2^10+2^14 = 256+1024+16384 =17767
+    //    https://docs.oracle.com/javase/8/docs/technotes/guides/language/underscores-literals.html
+
+    @Test
+    void should_truncate() {
+        final int negativeInteger = 0x7fff_ffff;
+        final short negativeSmallInteger = (short) negativeInteger;
+
+        assertTrue(negativeInteger > 0);
+        assertTrue(negativeSmallInteger < 0);
+    }
 
     @Test
     void should_increment() {
