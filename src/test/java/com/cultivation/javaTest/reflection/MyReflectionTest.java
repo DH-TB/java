@@ -1,4 +1,4 @@
-package com.cultivation.javaTest;
+package com.cultivation.javaTest.reflection;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,9 +11,7 @@ class   MyReflectionTest{
     @Test
     void should_invoke_getString() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method method = Reflection.class.getMethod("getString", String.class);
-        Reflection instance = new Reflection();
-
-        String actual = (String) method.invoke(instance, "My name");
-        assertEquals("My name", actual);
+        String string = (String) method.invoke(new Reflection(), "string");
+        assertEquals("string", string);
     }
 }

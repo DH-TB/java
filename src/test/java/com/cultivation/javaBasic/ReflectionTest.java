@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -68,17 +66,11 @@ class ReflectionTest {
         // TODO: please get all public static declared methods of Double. Sorted in an ascending order
         // <--start
 
-        Method[] declaredMethods = doubleClass.getDeclaredMethods();
-
-
-        List<String> methodList = new ArrayList<>();
-        for (Method method : declaredMethods) {
-            if (Modifier.isStatic(method.getModifiers()) && Modifier.isPublic(method.getModifiers())) {
-               methodList.add(method.getName());
-            }
-        }
-        Collections.sort(methodList);
-        String[] publicStaticMethods = methodList.toArray(new String[0]);
+        String[] publicStaticMethods = Arrays.stream(doubleClass.getDeclaredMethods())
+                .filter(method -> Modifier.isStatic(method.getModifiers()) && Modifier.isPublic(method.getModifiers()))
+                .map(Method::getName)
+                .sorted()
+                .toArray(String[]::new);
 
         // --end-->
 
@@ -91,7 +83,9 @@ class ReflectionTest {
 
         assertArrayEquals(expected, publicStaticMethods);
     }
-//  https://stackoverflow.com/questions/287645/how-can-i-check-if-a-method-is-static-using-reflection/287654
+
+    //  如果重写了方法，则只会拿到本类该方法
+    //  https://stackoverflow.com/questions/287645/how-can-i-check-if-a-method-is-static-using-reflection/287654
 
 
     @SuppressWarnings({"unused", "ConstantConditions", "RedundantThrows"})
@@ -102,7 +96,9 @@ class ReflectionTest {
         // TODO: please get the value of `getTitle` method using reflection. No casting to Employee is allowed.
         // <--start
         Method getTitle = employee.getClass().getMethod("getTitle");
-        Object result = getTitle.invoke(employee);
+        Object anotherEmployee = employee.getClass().newInstance();
+
+        Object result = getTitle.invoke(anotherEmployee);
         // --end-->
 
         assertEquals("Employee", result);
@@ -135,17 +131,10 @@ class ReflectionTest {
         // TODO: please get the methods who contains MyAnnotation annotation.
         // <--start
 
-        Method[] methods = theClass.getMethods();
-
-//        String[] methodsContainsAnnotations = null;
-
-        List<String> methodList = new ArrayList<>();
-        for (Method method : methods) {
-            if (method.getAnnotation(MyAnnotation.class) != null) {
-                methodList.add(method.getName());
-            }
-        }
-        String[] methodsContainsAnnotations = methodList.toArray(new String[0]);
+        String[] methodsContainsAnnotations = Arrays.stream(theClass.getMethods())
+                .filter(method -> method.getAnnotation(MyAnnotation.class) != null)
+                .map(method -> method.getName())
+                .toArray((length) -> new String[length]);
 
         assertArrayEquals(new String[]{"theMethod"}, methodsContainsAnnotations);
     }

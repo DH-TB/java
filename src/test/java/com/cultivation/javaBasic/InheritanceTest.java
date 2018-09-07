@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 // 1
 class InheritanceTest {
 
@@ -15,6 +16,7 @@ class InheritanceTest {
         // TODO: please modify the following code to pass the test
         // <--start
         final Class<?> expectedSuperClass = Object.class;
+        System.out.println(expectedSuperClass);
         // --end-->
         assertEquals(expectedSuperClass, SimpleEmptyClass.class.getSuperclass());
     }
@@ -76,6 +78,8 @@ class InheritanceTest {
     void should_call_most_derived_methods() {
         BaseClassForOverriding instance = new DerivedFromBaseClassForOverriding();
 
+        System.out.println(instance.getClass()); //class com.cultivation.javaBasic.util.DerivedFromBaseClassForOverriding
+
         // TODO: please modify the following code to pass the test
         // <--start
         final String expectedName = "DerivedFromBaseClassForOverriding";
@@ -100,8 +104,13 @@ class InheritanceTest {
     @SuppressWarnings({"ConstantConditions", "RedundantCast", "UnnecessaryLocalVariable"})
     @Test
     void should_use_caution_when_dealing_with_array_type() {
+        // 父类引用指向 子类实例
         DerivedFromSuperClassWithDefaultConstructor[] array = new DerivedFromSuperClassWithDefaultConstructor[4];
-        SuperClassWithDefaultConstructor[] arrayWithBaseType = array;
+        SuperClassWithDefaultConstructor[] arrayWithBaseType = (SuperClassWithDefaultConstructor[]) array;
+
+        // DerivedFromSuperClassWithDefaultConstructor extends SuperClassWithDefaultConstructor
+        // 用反射证明 ，但两个数组之间不是 子类和父类关系
+
         boolean willThrow = false;
 
         //可以读出 是父类
@@ -120,6 +129,23 @@ class InheritanceTest {
         assertEquals(expected.get(), willThrow);
     }
 
+    @Test
+    void should_test_object_array_use_reflection() {
+        Class<? super DerivedFromSuperClassWithDefaultConstructor[]> superclass = DerivedFromSuperClassWithDefaultConstructor[].class.getSuperclass();
+        System.out.println(superclass);
+
+        boolean actual = test(DerivedFromSuperClassWithDefaultConstructor[].class.getSuperclass());
+        assertFalse(actual);
+    }
+
+    boolean test(Class<? super DerivedFromSuperClassWithDefaultConstructor[]> superclass) {
+        if (superclass.equals(SuperClassWithDefaultConstructor[].class))
+            return true;
+        if (superclass != Object.class) {
+            test(superclass.getSuperclass());
+        }
+        return false;
+    }
 
     @SuppressWarnings("UnnecessaryLocalVariable")
     @Test
@@ -176,8 +202,13 @@ class InheritanceTest {
         final Optional<Boolean> expectedResult2 = Optional.of(false);
         // --end-->
 
-        assertEquals(expectedResult1.get(), integer instanceof Integer );
-        assertEquals(expectedResult2.get(), integer instanceof Long );
+        assertEquals(expectedResult1.get(), integer instanceof Integer);
+        assertEquals(expectedResult1.get(), integer instanceof Number);
+        // true
+
+        assertEquals(expectedResult2.get(), integer instanceof Short);
+        assertEquals(expectedResult2.get(), integer instanceof Long);
+        //false
     }
 
     @SuppressWarnings({"SimplifiableJUnitAssertion", "EqualsWithItself"})
@@ -233,10 +264,10 @@ class InheritanceTest {
         PersonForEquals person = new PersonForEquals("James", (short) 1990);
         PersonForEquals different = new PersonForEquals("James", (short) 1991);
 
+
         assertFalse(person.equals(different));
         assertFalse(different.equals(person));
     }
-
 
     @Test
     void should_write_perfect_equals_7() {

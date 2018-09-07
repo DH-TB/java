@@ -6,6 +6,7 @@ import java.util.Objects;
 public class PersonForEquals {
     private final String name;
     private final short yearOfBirth;
+    private Object aNull;
 
     public PersonForEquals(String name, short yearOfBirth) {
         if (name == null) {
@@ -34,13 +35,13 @@ public class PersonForEquals {
     public boolean equals(Object obj) {
         // TODO: please modify the following code to pass the test
         // <--start
-        if (this == obj) return true;
+        if(obj == null || this.getClass() != obj.getClass())  return false;
 
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if(this == obj) return true;
+
         PersonForEquals person = (PersonForEquals) obj;
 
-        return name.equals(person.name) && yearOfBirth == person.yearOfBirth;
-
+        return person.name.equals(this.name) && person.yearOfBirth == this.yearOfBirth;
         // --end-->
     }
 

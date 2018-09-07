@@ -1,4 +1,4 @@
-package com.cultivation.javaTest;
+package com.cultivation.javaTest.reflection;
 
 public class Reflection{
 

@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ObjectTest {
     @SuppressWarnings({"UnnecessaryLocalVariable", "ConstantConditions"})
@@ -114,7 +115,6 @@ class ObjectTest {
     @Test
     void should_choose_method_at_compile_time() {
         OverloadingFixture fixture = new OverloadingFixture();
-
         String actual = fixture.methodWithOneParameter((Object)"I am a string");
 
         // TODO: please modify the following code to pass the test. You should write the result directly.

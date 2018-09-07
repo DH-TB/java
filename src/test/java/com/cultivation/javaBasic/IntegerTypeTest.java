@@ -246,6 +246,7 @@ class IntegerTypeTest {
         return Math.addExact(left, right);
     }
 
+
     //https://stackoverflow.com/questions/38812863/how-to-cause-an-exception-on-integer-overflow/38812905
 
     /*

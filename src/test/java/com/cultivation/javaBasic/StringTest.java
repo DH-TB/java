@@ -2,6 +2,7 @@ package com.cultivation.javaBasic;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -358,7 +359,6 @@ class StringTest {
         // <--start
         final String expectedText = "Hello, Harry. Next year, you will be 23.";
         // --end-->
-
         assertEquals(expectedText, text);
     }
 
@@ -366,19 +366,22 @@ class StringTest {
         // TODO: please implement the method to the pass the test
         // <--start
 
-        return withSurrogatePairs.codePoints().toArray();
+//        return withSurrogatePairs.codePoints().toArray();
 
-//        int codePointLength = Character.codePointCount(withSurrogatePairs, 0, withSurrogatePairs.length());
-//        int[] codePointArray = new int[codePointLength];
-//        int count = 0;
-//
-//        for (int i = 0; i < withSurrogatePairs.length(); ) {
-//            int character = withSurrogatePairs.codePointAt(i);
-//            codePointArray[count++] = character;
-//            i += Character.charCount(character);
-//        }
-//
-//        return codePointArray;
+
+        int codePointLength = Character.codePointCount(withSurrogatePairs, 0, withSurrogatePairs.length());
+        int[] codePointArray = new int[codePointLength];
+        int count = 0;
+
+        for (int i = 0; i < withSurrogatePairs.length(); ) {
+            int character = withSurrogatePairs.codePointAt(i);
+            codePointArray[count++] = character;
+            i += Character.charCount(character);
+
+            i += Character.charCount(Character.codePointAt(withSurrogatePairs,i));
+        }
+
+        return codePointArray;
         // --end-->
     }
 
@@ -400,6 +403,8 @@ class StringTest {
         int[] ints = new int[2];
         // 0
 
+        Number number = 2;
+        Integer integer = (Integer) number;
         assertEquals(string, null);
     }
 //    https://stackoverflow.com/questions/5389200/what-is-a-java-strings-default-initial-value
