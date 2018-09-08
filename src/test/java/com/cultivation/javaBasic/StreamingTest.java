@@ -158,7 +158,7 @@ class StreamingTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        Stream<AnimeCharacter> characters = nameStream.map((name) -> new AnimeCharacter(name));
+        Stream<AnimeCharacter> characters = nameStream.map(name -> new AnimeCharacter(name));
         // --end-->
         {
             AnimeCharacter[] actual = characters.toArray(AnimeCharacter[]::new);

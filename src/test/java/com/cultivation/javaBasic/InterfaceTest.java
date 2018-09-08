@@ -3,8 +3,8 @@ package com.cultivation.javaBasic;
 import com.cultivation.javaBasic.showYourIntelligence.NameImpl;
 import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class InterfaceTest {
 
     @Test

@@ -1,13 +1,7 @@
 package com.cultivation.javaBasicExtended.matrixMultiplication;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
-//
 @SuppressWarnings({"WeakerAccess", "unused"})
 class Matrix {
     private final int[][] storage;

@@ -4,8 +4,10 @@ import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,6 +18,13 @@ class LambdaTest {
     void should_apply_to_interface_with_single_abstract_method() {
         StringFunc lambda = () -> "Hello";
 
+        StringFunc lam = new StringFunc() {  //类
+            @Override
+            public String getString() {
+                return "Hello";
+            }
+        };
+
         // () -> "Hello" 相当于，实现了StringFunc接口
 
         // TODO: please modify the following code to pass the test
@@ -25,16 +34,23 @@ class LambdaTest {
 
         assertEquals(expect, lambda.getString());
     }
+    //  不能new 接口
+    //  匿名类编译时产生
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void should_be_able_to_bind_to_instance_method() {
         // TODO: please bind lambda to instanceMethod.
         // <--start
-        StringFunc lambda = this::instanceMethod;
+        StringFunc lambda = new StringFunc() {
+            @Override
+            public String getString() {
+                return LambdaTest.this.instanceMethod(); // 方法未调用 inner调用outter
+            }
+        };
         // --end-->
 
-        assertEquals("instanceMethod", lambda.getString());
+        assertEquals("instanceMethod", lambda.getString());  //方法调用
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -42,7 +58,12 @@ class LambdaTest {
     void should_be_able_to_bind_to_static_method() {
         // TODO: please bind lambda to staticMethod
         // <--start
-        StringFunc lambda = LambdaTest::staticMethod;
+        StringFunc lambda = new StringFunc() {
+            @Override
+            public String getString() {
+                return staticMethod();
+            }
+        };
         // --end-->
 
         assertEquals("staticMethod", lambda.getString());
@@ -53,7 +74,7 @@ class LambdaTest {
     void should_bind_to_constructor() {
         // TODO: please bind lambda to constructor of ArrayList<Integer>
         // <--start
-        GenericFunc<ArrayList<Integer>> lambda = () -> new ArrayList<>();
+        GenericFunc<ArrayList<Integer>> lambda = () -> new ArrayList<Integer>();
         // --end-->
 
 
@@ -66,7 +87,15 @@ class LambdaTest {
     void should_capture_variable_in_a_closure() {
         int captured = 5;
 
-        StringFunc lambda = () -> captured + " has been captured.";
+        StringFunc lambda = new StringFunc() {
+            @Override
+
+            public String getString() {
+                return captured + " has been captured.";   // 被捕获的变量是final，是个直接引用
+            }
+        };
+
+        //闭包是：函数 + 定义的环境
 
         final String message = lambda.getString();
 
@@ -80,17 +109,19 @@ class LambdaTest {
 
     //在终止时捕捉变量
     @Test
-    void should_in_stringfunc() throws IllegalAccessException {
-        int captured  = 5;
+    void should_in_stringfunc(){
+        int captured = 5;
         StringFunc lambda = () -> captured + "has been captured.";
 
+        Method[] declaredMethods = lambda.getClass().getDeclaredMethods();
+        for(Method method :declaredMethods){
+            System.out.println(method.getName());
+        }
+
         Field[] declaredFields = lambda.getClass().getDeclaredFields();
-        for(Field field : declaredFields){
+        for (Field field : declaredFields) {
             field.setAccessible(true);
             boolean modifiers = Modifier.isFinal(field.getModifiers());
-            System.out.println(modifiers);
-
-            Object obj = field.get(lambda);
         }
     }
 
@@ -118,6 +149,11 @@ class LambdaTest {
         StringFunc stringFunc = returnLambda();
         String message = stringFunc.getString();
 
+//        Field[] declaredFields = stringFunc.getClass().getDeclaredFields();
+//        for(Field field : declaredFields){
+//            System.out.println(field.getName());
+//        }
+
         // TODO: please write down the expected string directly.
         // <--start
         final String expected = "In the year 2019";
@@ -127,6 +163,8 @@ class LambdaTest {
     }
 
     @Test
+    //this指针 —— instance
+    // 闭包定义时的this，也能被保存
     void should_capture_this_variable() {
         ThisInClosure instance = new ThisInClosure();
         StringFunc stringFunc = instance.getLambda();
@@ -156,7 +194,7 @@ class LambdaTest {
 
 
     @Test
-    void should_new_object(){
+    void should_new_object() {
         Supplier supplier = () -> new Object();
 
         System.out.println(Object.class);
@@ -165,6 +203,10 @@ class LambdaTest {
         assertTrue(Object.class.equals(supplier.get().getClass()));
     }
 
+    @Test
+    void should_not_assign_lambda_to_object() {
+
+    }
 }
 
 /*

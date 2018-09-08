@@ -1,4 +1,4 @@
-package com.cultivation.javaTest.mytest;
+package com.cultivation.javaTest.myAnnotationTest;
 
 import java.lang.annotation.*;
 

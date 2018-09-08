@@ -18,11 +18,13 @@ For `javaBasic` package:
 
 1. InterfaceTest
 1. LambdaTest
-
+//
 1. InnerClassTest
 1. ExceptionTest
+
 1. GenericTest
 1. CollectionsTest
+
 1. StreamingTest
 1. IOTest
 1. DateTimeTest

@@ -1,7 +1,7 @@
 package com.cultivation.javaBasic.util;
 
 public interface InterfaceWithDefaultMethod {
-//    final int age;
+    int age = 0;
 
     default String tellMeTheTruthOfTheUniverse() {
         return "The truth of the universe is " + getTheTruthOfTheUniverse();

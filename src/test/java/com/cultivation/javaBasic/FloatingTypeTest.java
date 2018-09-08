@@ -2,9 +2,7 @@ package com.cultivation.javaBasic;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FloatingTypeTest {
     @Test
@@ -46,9 +44,9 @@ class FloatingTypeTest {
     //https://www.cnblogs.com/zhisuoyu/p/5314541.html
 
     @Test
-    void should() {
-
+    void should_test_NaN() {
         assertEquals(Double.NaN, Double.NaN);
+        assertNotSame(Double.NaN, Double.NaN);
         assertFalse(Double.NaN == Double.NaN);
         assertFalse(0/0.0 == 0/0.0);
 

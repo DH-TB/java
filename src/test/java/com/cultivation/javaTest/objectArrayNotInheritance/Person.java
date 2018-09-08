@@ -1,8 +1,6 @@
 package com.cultivation.javaTest.objectArrayNotInheritance;
 
-import com.cultivation.javaTest.mytest.MyNameAnnotation;
-
-import java.lang.annotation.Inherited;
+import com.cultivation.javaTest.myAnnotationTest.MyNameAnnotation;
 
 @MyNameAnnotation
 class Person {

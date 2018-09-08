@@ -12,7 +12,6 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//4
 class ReflectionTest {
     @Test
     void should_be_able_to_get_class_object() {

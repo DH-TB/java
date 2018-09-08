@@ -2,6 +2,7 @@ package com.cultivation.javaBasic;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -9,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-//5
 class StringTest {
     @SuppressWarnings({"StringEquality", "ConstantConditions"})
     @Test
@@ -340,7 +340,7 @@ class StringTest {
         final String withSurrogatePairs =
                 new String(Character.toChars(0x20B9F)) + " is funny";
 
-        final int[] codePoints = getCodePointsFromString(withSurrogatePairs);
+        final int[] codePoints = getCodePoints(withSurrogatePairs);
 
         assertArrayEquals(
                 new int[]{0x20B9F, (int) ' ', (int) 'i', (int) 's', (int) ' ', (int) 'f', (int) 'u', (int) 'n', (int) 'n', (int) 'y'},
@@ -363,49 +363,55 @@ class StringTest {
     }
 
     private int[] getCodePointsFromString(String withSurrogatePairs) {
-        // TODO: please implement the method to the pass the test
-        // <--start
-
-//        return withSurrogatePairs.codePoints().toArray();
-
 
         int codePointLength = Character.codePointCount(withSurrogatePairs, 0, withSurrogatePairs.length());
         int[] codePointArray = new int[codePointLength];
-        int count = 0;
+        int codePointIndex = 0;
 
-        for (int i = 0; i < withSurrogatePairs.length(); ) {
-            int character = withSurrogatePairs.codePointAt(i);
-            codePointArray[count++] = character;
-            i += Character.charCount(character);
+        for (int charIndex = 0; charIndex < withSurrogatePairs.length(); ) {
+            int character = withSurrogatePairs.codePointAt(charIndex);
+            codePointArray[codePointIndex++] = character;
 
-            i += Character.charCount(Character.codePointAt(withSurrogatePairs,i));
+            charIndex += Character.charCount(character);
+        }
+        return codePointArray;
+    }
+
+    private int[] getCodePoints(String withSurrogatePairs){
+        ArrayList<Object> codePointArray = new ArrayList<>();
+
+        for(int charIndex = 0; charIndex < withSurrogatePairs.length(); ){
+            int character = withSurrogatePairs.codePointAt(charIndex);
+            codePointArray.add(character);
+            charIndex += Character.charCount(character);
         }
 
-        return codePointArray;
-        // --end-->
+        return codePointArray.stream().mapToInt(i -> (int)i).toArray();
     }
 
     @Test
     void name() {
         boolean[] list = new boolean[10];
+        System.out.println(list[0]);
         // all ten elements are assigned to false
 
         Boolean[] list1 = new Boolean[10];
         // all ten elements are assigned to null (default Object/Boolean value)
+        System.out.println(list[0]);
 
         char[] chars = new char[10];
+        System.out.println(chars[0]);
         // '\u0000'
 
         String[] strings = new String[1];
+        System.out.println(strings[0]);
         // null
-        String string = strings[0];
 
         int[] ints = new int[2];
+        System.out.println(ints[0]);
         // 0
 
-        Number number = 2;
-        Integer integer = (Integer) number;
-        assertEquals(string, null);
+
     }
 //    https://stackoverflow.com/questions/5389200/what-is-a-java-strings-default-initial-value
 

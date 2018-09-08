@@ -3,7 +3,7 @@ package com.cultivation.javaBasic.showYourIntelligence;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
-public class PersonForEquals {
+public class PersonForEquals implements Comparable<PersonForEquals> {
     private final String name;
     private final short yearOfBirth;
     private Object aNull;
@@ -30,14 +30,29 @@ public class PersonForEquals {
         return yearOfBirth;
     }
 
+    @Override
+    public int compareTo(PersonForEquals person) {
+        if (person == null){
+            throw new NullPointerException();
+        }
+
+        int compare = person.name.compareTo(this.name);
+        if(compare != 0){
+            return compare;
+        }
+
+        if (this.yearOfBirth == person.yearOfBirth) return 0;
+        return this.yearOfBirth - person.yearOfBirth > 0 ? 1 : -1;
+    }
+
     @SuppressWarnings("Contract")
     @Override
     public boolean equals(Object obj) {
         // TODO: please modify the following code to pass the test
         // <--start
-        if(obj == null || this.getClass() != obj.getClass())  return false;
+        if (obj == null || this.getClass() != obj.getClass()) return false;
 
-        if(this == obj) return true;
+        if (this == obj) return true;
 
         PersonForEquals person = (PersonForEquals) obj;
 

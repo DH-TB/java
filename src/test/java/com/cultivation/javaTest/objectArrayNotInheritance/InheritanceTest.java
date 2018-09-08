@@ -25,14 +25,6 @@ class InheritanceTest {
     }
 
     @Test
-    void should_inheritance() {
-        Class<?> personType = Person[].class.getComponentType();
-        Class<?> studentType = Student[].class.getComponentType();
-        boolean actual = studentType.getSuperclass() == personType;
-        assertTrue(actual);
-    }
-
-    @Test
     void should_test_annotation_inherited() {
         Class<Student> aClass = Student.class;
 
