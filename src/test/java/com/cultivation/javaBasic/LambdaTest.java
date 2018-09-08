@@ -1,13 +1,15 @@
 package com.cultivation.javaBasic;
 
-import com.cultivation.javaBasic.util.*;
+import com.cultivation.javaBasic.util.GenericFunc;
+import com.cultivation.javaBasic.util.StringFunc;
+import com.cultivation.javaBasic.util.ThisInClosure;
+import com.cultivation.javaBasic.util.ValueHolder;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
