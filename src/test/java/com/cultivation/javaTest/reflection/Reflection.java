@@ -1,11 +1,11 @@
 package com.cultivation.javaTest.reflection;
 
-public class Reflection{
+class Reflection{
 
-    public Reflection() {
+    Reflection() {
     }
 
-    public String getString(String name){
+    String getString(String name){
         return name;
     }
 }

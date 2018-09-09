@@ -4,6 +4,12 @@
 ```
 int * int 可能会超过int的最大值，所以应该转为更长整型 long
 判断溢出的方法：Math.addExact(left, right)
+源码：
+int r = x + y;
+if (((x ^ r) & (y ^ r)) < 0) {
+  throw new ArithmeticException("integer overflow");
+}
+只有当 x y 是同符号的时候才可能会溢出（x 和 y 的符号都跟 r 不一样）
 ```
 
 + 算术运算的类型
@@ -34,8 +40,6 @@ public static final double NaN = 0.0d / 0.0;
 NAN：表示非数字，和谁都不相等，也不等于自己
 举例：assertFalse(Double.NaN == Double.NaN);
 ```
-https://www.cnblogs.com/zhisuoyu/p/5314541.html
-
 
 + 几个基本类型的默认值：
 ```
@@ -92,6 +96,7 @@ char —— 2字节 —— 2*8 ——无符号
 **DAY 2**
 
 + 类的访问修饰符
+
 ![](https://upload-images.jianshu.io/upload_images/3087126-9df1865c3184f1a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 + final 修饰符

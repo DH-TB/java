@@ -1,7 +1,7 @@
 package com.cultivation.javaBasicExtended.posMachine;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
@@ -9,42 +9,20 @@ import java.util.*;
 @SuppressWarnings({"WeakerAccess", "unused", "RedundantThrows"})
 
 public class PosMachine {
-    private List<HashMap> productList = new ArrayList<>();
+    private List<Product> productList;
 
     public void readDataSource(Reader reader) throws IOException {
         if (reader == null) {
             throw new IllegalArgumentException();
         }
-        String dataSource = convertReaderToString(reader);
-        convertStringToProductList(dataSource);
-    }
-
-    private void convertStringToProductList(String dataSource) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-
-        List<HashMap> dataList = objectMapper.readValue(dataSource, List.class);
-        for(HashMap data : dataList){
-            Map<String, Object> products = new HashMap<>();
-
-            products.put("id", data.get("id"));
-            products.put("name", data.get("name"));
-            products.put("price", data.get("price"));
-
-            productList.add((HashMap) products);
-        }
+        productList = objectMapper.readValue(reader, new TypeReference<List<Product>>() {});
     }
 
-    private String convertReaderToString(Reader reader) throws IOException {
-        int intValue;
-        StringBuilder targetString = new StringBuilder();
-        while ((intValue = reader.read()) != -1) {
-            targetString.append((char) intValue);
-        }
-        reader.close();
-        return targetString.toString();
-    }
 
     public String printReceipt(String barcodeContent) throws IOException {
+        if (productList == null) throw new IllegalStateException();
+
         if (barcodeContent == null) {
             barcodeContent = "[]";
         }
@@ -52,57 +30,56 @@ public class PosMachine {
         final String splitLine = "------------------------------------------------------------";
         final String line = System.lineSeparator();
         StringBuilder receiptString = new StringBuilder();
-
         receiptString.append("Receipts").append(line).append(splitLine).append(line);
-        int totalPrice = buildReceipt(barcodeContent, receiptString, line);
+
+        Map<Object, Integer> barcodeCountMap = getBarcodeCountMap(barcodeContent);
+
+        int totalPrice = getTotalPrice(line, receiptString, barcodeCountMap);
         receiptString.append(splitLine)
                 .append(line)
                 .append("Price: ")
                 .append(totalPrice)
                 .append(line);
-
         return receiptString.toString();
     }
 
-    private int buildReceipt(String barcodeContent, StringBuilder receiptString, String line) throws IOException {
+    private int getTotalPrice(String line, StringBuilder receiptString, Map<Object, Integer> barcodeCountMap) {
         String template = "%-32s%-11s%d";
         int totalPrice = 0;
 
-        HashMap<Object, Object> barcodeMap = getBarcodeMap(barcodeContent);
-        for (Map.Entry<Object, Object> map : barcodeMap.entrySet()) {
-            HashMap item = getItem((String) map.getKey());
+        for (Map.Entry<Object, Integer> barcodeCount : barcodeCountMap.entrySet()) {
+            Product product = getProductByBarcode(barcodeCount);
 
-            int price = (int) item.get("price");
-            int count = (int) map.getValue();
+            int price = product.getPrice();
+            int count = barcodeCount.getValue();
             totalPrice += price * count;
 
-            receiptString.append(String.format(template, item.get("name"), price, count)).append(line);
+            receiptString.append(String.format(template, product.getName(), price, count)).append(line);
         }
-
         return totalPrice;
     }
 
-    private HashMap<Object, Object> getBarcodeMap(String barcodeContent) throws IOException {
+    private Product getProductByBarcode(Map.Entry<Object, Integer> barcodeCount) {
+        return productList.stream()
+                .filter(product -> product.getId().equals(barcodeCount.getKey()))
+                .findFirst()
+                .orElseThrow(IllegalStateException::new);
+    }
+
+    private Map<Object, Integer> getBarcodeCountMap(String barcodeContent) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         List barcodeList = objectMapper.readValue(barcodeContent, List.class);
 
-        LinkedHashMap<Object, Object> barcodeMap = new LinkedHashMap<>();
-
+        LinkedHashMap<Object, Integer> barcodeMap = new LinkedHashMap<>();
         for (Object barcode : barcodeList) {
-            Integer count = Collections.frequency(barcodeList, barcode);
-            barcodeMap.put(barcode, count);
+            Integer result = barcodeMap.putIfAbsent(barcode, 1);
+            if (result != null) {
+                barcodeMap.put(barcode, result + 1);
+            }
         }
         return barcodeMap;
     }
 
-    private HashMap getItem(String barcode) {
-        for (HashMap item : productList) {
-            if (barcode.equals(item.get("id"))) {
-                return item;
-            }
-        }
-        throw new IllegalStateException();
-    }
 }
 
 @SuppressWarnings("unused")
