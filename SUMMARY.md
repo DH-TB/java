@@ -165,8 +165,7 @@ public int hashCode() {
 
 + 栈溢出
 ```
-一种是stackoverflow，递归没终止条件
-一种是outofmemory，方法中线程启动过多
+stackoverflow，可能情况：递归没终止条件
 ```
 
 + 参数
