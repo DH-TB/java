@@ -128,16 +128,16 @@ UTF-32：可以用 4 字节来表示
 + 字符串拼接
 ```
 因为String不可变，每次拼接都会产生新的字符串，效率低，可以使用String.format()或者 new StringBuilder()
-new StringBuffer() 是线程安全的，所以平常使用new StringBuilder()
+new StringBuffer() 是线程安全的，new StringBuilder()不是线程安全
 ```
 
 + Java Equals() 特性
 ```
-1、自反性：对于非空引用值 x，x.equals(x) 都应返回 true。
-2、对称性：对于非空引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 才应返回 true。
-3、传递性：对于非空引用值 x、y 和 z，如果 x.equals(y) 返回 true, y.equals(z) 返回 true,则 x.equals(z)也返回 true。
-4、一致性：对于非空引用值 x 和 y，多次调用 x.equals(y) 始终返回 true 或 false，前提：equals比较的信息没有被修改。
-5、对于任何非空引用值 x，x.equals(null) 都应返回 false。
+1、自反性：x.equals(x) 返回 true。
+2、对称性：如果 y.equals(x) 返回 true，x.equals(y) 也返回 true。
+3、传递性：如果 x.equals(y) 返回 true, y.equals(z) 返回 true,则 x.equals(z)也返回 true。
+4、一致性：多次调用 x.equals(y) 始终返回 true 或 false，前提：equals比较的信息没有被修改。
+5、x.equals(null) 返回 false。
 ```
 
 + Equals() 和 == 的区别 
@@ -147,7 +147,7 @@ equals() 比较值相等
 但 Object.equals() 比较的是引用，所有继承了 Object 的对象，如果没有重写equals() 方法，也是比较引用
 一般重写equals() 是为了只比较值是否相等
 如果 Identify ，则一定Equality
-如果Equality，则hashcode一定相等
+如果Equality，则hashCode一定相等
 ```
 
 + 重写Equals方法
