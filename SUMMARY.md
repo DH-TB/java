@@ -97,7 +97,12 @@ char —— 2字节 —— 2*8 ——无符号
 
 + 类的访问修饰符
 
-![](https://upload-images.jianshu.io/upload_images/3087126-9df1865c3184f1a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+| Modifier | Class   | Package | Subclass  | World   |
+|---|---|---|---|---|
+|public| Y | Y | Y | Y |
+|protected| Y | Y | Y | N |
+|package-private| Y | Y | N | N |
+|private| Y | N | N | N | 
 
 + final 修饰符
 ```
