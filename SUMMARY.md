@@ -116,7 +116,8 @@ UTF-32：可以用 4 字节来表示
 
 + codePoint 和 char
 ```
-一个char 不能完全代表一个code point，一个code point 可能会超过两个字节，一个char 表示不了，所以 code point 用 int 存储
+一个char 不能完全代表一个code point，一个code point 可能会超过两个字节，一个char 表示不了
+所以 code point 用 int 存储
 ```
 
 + 字符串拼接
@@ -127,10 +128,10 @@ new StringBuffer() 是线程安全的，所以平常使用new StringBuilder()
 
 + Java Equals() 特性
 ```
-1、自反性：对于任何非空引用值 x，x.equals(x) 都应返回 true。
-2、对称性：对于任何非空引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 才应返回 true。
-3、传递性：对于任何非空引用值 x、y 和 z，如果 x.equals(y) 返回 true，并且 y.equals(z) 返回 true，那么 x.equals(z) 应返回 true。
-4、一致性：对于任何非空引用值 x 和 y，多次调用 x.equals(y) 始终返回 true 或始终返回 false，前提是对象上 equals 比较中所用的信息没有被修改。
+1、自反性：对于非空引用值 x，x.equals(x) 都应返回 true。
+2、对称性：对于非空引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 才应返回 true。
+3、传递性：对于非空引用值 x、y 和 z，如果 x.equals(y) 返回 true，且 y.equals(z) 返回 true，那么 x.equals(z) 应返回 true。
+4、一致性：对于非空引用值 x 和 y，多次调用 x.equals(y) 始终返回 true 或始终返回 false，前提是equals比较的信息没有被修改。
 5、对于任何非空引用值 x，x.equals(null) 都应返回 false。
 ```
 
@@ -182,7 +183,8 @@ Init block 和 filed  都和声明顺序有关，但是都在constructor之前�
 
 + 变量初始化 
 ```
-局部变量声明后，Java虚拟机不会自动给它初始化为默认值，必须经过显示的初始化，才能使用。如果使用一个没有被初始化的局部变量，编译器会报错。
+局部变量声明后，Java虚拟机不会自动给它初始化为默认值，必须经过显示的初始化，才能使用。
+如果使用一个没有被初始化的局部变量，编译器会报错。
 类的成员变量，Java虚拟机都会先自动给它初始化为默认值。
 Java虚拟机会为数组的所有元素初始化为相应类型的默认值。引用类型被初始化为 null ，基本类型初始化为相应的值
 ```
@@ -289,7 +291,8 @@ instance of 在继承 / 实现中都可以用来判断是否是实例
 + 抽象类和接口区别
 ```
 单继承，一个类只能继承一个父类，有 public / private 
-多接口，一个类可以实现多个接口（当实现了多个接口时，可以显示通过 父类.super.method()来指定调用哪个父类的方法，而且必须重写方法，哪怕是default方法）
+多接口，一个类可以实现多个接口
+当实现了多个接口时，可以显示通过 父类.super.method()来指定调用哪个父类的方法，而且必须重写方法，哪怕是default方法
 接口默认是public， 类里面默认是package-private
 ```
 
