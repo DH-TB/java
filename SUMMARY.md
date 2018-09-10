@@ -88,9 +88,9 @@ char —— 2字节 —— 2*8 ——无符号
 << ：左移运算符，num << 1,相当于num乘以2
 >> ：右移运算符，num >> 1,相当于num除以2
 >>>：无符号右移，忽略符号位，空位都以0补齐
-举例： 1000 …….. 1000
-不带符号位（整体右移1） >>>：0100 ……0100
-带符号位（符号位不动）>>：1000 …….. 0100
+举例： 1000 …… 1000
+不带符号位（整体右移1） >>>：0100 ……100
+带符号位（符号位不动）>>：1000 ……0100
 ```
 
 **DAY 2**
@@ -283,9 +283,10 @@ getDeclaredMethods: 本类声明的所有方法（public / protected /default / 
 接口：可以有多个抽象方法（抽象方法没有body），也可以有多个default / static 方法
 接口： default 方法可以不被子类重写，其他方法（public /abstract）必须在实现类中重写
 接口只能继承接口，不能实现接口 （interface extends interface）
-abstract 声明的类不能实例化
-instance of 在继承 / 实现中都可以用来判断是否是实例
-```
+
+instance of 在继承 / 实现中都可以用来判断是否是某个类的实例，但一般不建议使用
+因为在父子类之间使用无法判断相等，应使用getClass()来判断是否相等
+``` 
 
 + 函数式接口
 ```
@@ -299,6 +300,7 @@ instance of 在继承 / 实现中都可以用来判断是否是实例
 多接口，一个类可以实现多个接口
 当实现了多个接口时，可以显示通过 父类.super.method()来指定调用哪个父类的方法，而且必须重写方法，哪怕是default方法
 接口默认是public， 类里面默认是package-private
+abstract 声明的类不能实例化
 ```
 
 + Lambda表达式
@@ -312,12 +314,12 @@ Lambda：在编译时，表达式里面的变量直接定义在闭包（closure�
 
 + 注解
 ```
-@interface Annotation{ } 定义一个注解 @Annotation，一个注解是一个类
+@interface Annotation{ } 定义一个注解 @Annotation
 ```
 
 + 元注解
 ```
-@Target：定义了修饰的类型
+@Target：定义了修饰的对象范围
 @Retention：定义了注解的声明周期
 @Documented：是一个标记注解，没有成员，被修饰的注解会生成到javadoc
 @Inherited：子类Class对象可以使用getAnnotations()获取父类被@Inherited修饰的注解
