@@ -34,7 +34,7 @@ public static final double NEGATIVE_INFINITY = -1.0 / 0.0;
 INFINITY：表示无限，乘以 0 等于NAN，做其他运算结果还是无限
 ```
 
-+ NAN的定义：
++ NaN的定义：
 ```
 public static final double NaN = 0.0d / 0.0;
 NAN：表示非数字，和谁都不相等，也不等于自己
