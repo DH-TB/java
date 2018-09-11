@@ -7,7 +7,9 @@ public class Sequence implements Iterable<Integer> {
     private final Integer end;
 
     public Sequence(Integer start, Integer end) {
-        if (start >= end) { throw new IllegalArgumentException("Start must be smaller than End."); }
+        if (start >= end) {
+            throw new IllegalArgumentException("Start must be smaller than End.");
+        }
         this.start = start;
         this.end = end;
     }
@@ -17,6 +19,7 @@ public class Sequence implements Iterable<Integer> {
         return new SequenceIterator(start, end);
     }
 }
+
 
 class SequenceIterator implements Iterator<Integer> {
     // TODO: You can add additional fields or methods if you want.
@@ -28,8 +31,8 @@ class SequenceIterator implements Iterator<Integer> {
     SequenceIterator(Integer start, Integer end) {
         // TODO: please implements the following code to pass the test
         // <--start
-      this.start = start;
-      this.end = end;
+        this.start = start;
+        this.end = end;
 
         // --end-->
     }
@@ -38,7 +41,7 @@ class SequenceIterator implements Iterator<Integer> {
     public boolean hasNext() {
         // TODO: please implements the following code to pass the test
         // <--start
-        return start<end;
+        return start < end;
         // --end-->
     }
 
@@ -46,7 +49,7 @@ class SequenceIterator implements Iterator<Integer> {
     public Integer next() {
         // TODO: please implements the following code to pass the test
         // <--start
-       return start++;
+        return start++;
         // --end-->
     }
 }

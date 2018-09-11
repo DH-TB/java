@@ -7,31 +7,27 @@ import com.cultivation.javaBasic.util.Pair;
 import org.junit.jupiter.api.Test;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //
-class GenericTest {
+public class GenericTest {
     @SuppressWarnings("unused")
     @Test
     void should_auto_resolve_generic_method() {
         final String[] words = {"Hello", "Good", "Morning"};
+        final String middle = getLast(words);
 
-        // TODO: please call getMiddle method for string
-        // <--start
-        final String middle = getMiddle(words);
-
-
-        // --end-->
-
-        assertEquals("Good", middle);
+        final Integer[] intArray = {1, 2, 3};
+        final int last = getLast(intArray);
+        assertEquals(3, last);
+        assertEquals("Morning", middle);
     }
 
 
@@ -39,7 +35,9 @@ class GenericTest {
     void should_specify_a_type_restriction_on_typed_parameters() {
         int minimumInteger = min(new Integer[]{1, 2, 3});
         double minimumReal = min(new Double[]{1.2, 2.2, -1d});
+        String minimunString = min(new String[]{"a", "b"});
 
+        assertEquals("a", minimunString);
         assertEquals(1, minimumInteger);
         assertEquals(-1d, minimumReal, 1.0E-05);
     }
@@ -50,37 +48,28 @@ class GenericTest {
     @Test
     void should_not_know_generic_type_parameters_at_runtime() {
         KeyValuePair<String, Integer> pair = new KeyValuePair<>("name", 2);
-        KeyValuePair<Integer, String> pairWithDifferentTypeParameter = new KeyValuePair<>(2, "name");
+        KeyValuePair<Integer, String> pair1 = new KeyValuePair<>(2, "name");
 
-
-        // TODO: please modify the following code to pass the test
-        // <--start
-        final Optional<Boolean> expected = Optional.of(true);
-        // --end-->
-        assertEquals(expected.get(), pair.getClass().equals(pairWithDifferentTypeParameter.getClass()));
+        final Optional<?> expect = Optional.of(true);
+        assertEquals(expect.get(), pair.getClass().equals(pair1.getClass()));
     }
-
-    @Test
-    void should_can_transfer_type() {
-        KeyValuePair<String, Integer> pair = new KeyValuePair<>("name", 2);
-
-        KeyValuePair keyValuePair = new KeyValuePair<>(new Object(), new Object());
-        KeyValuePair<String, Integer> havePair = keyValuePair;
-
-    }
-
-    // class com.cultivation.javaBasic.util.KeyValuePair
 
     @SuppressWarnings({"UnnecessaryLocalVariable", "unchecked", "unused", "ConstantConditions"})
     @Test
     void should_be_careful_of_raw_type_generic() {
         Pair<Manager> managerPair = new Pair<>();
         Pair rawPair = managerPair;
-        rawPair.setFirst(new Employee());
+        rawPair.setFirst(new Employee());  // 类型推断
+
+        //row type大的 set 具体的 get
+        Pair<Employee> employeePair = new Pair<>();
+        employeePair.setFirst(new Manager());       // manager是子类，可以隐示转换为父类
+        //父类里面可以 set 子类，子类不可以 set 父类
+
 
         boolean willThrow = false;
         try {
-            Manager first = managerPair.getFirst();
+            Manager first = managerPair.getFirst();   //get 类型
         } catch (ClassCastException error) {
             willThrow = true;
         }
@@ -104,28 +93,27 @@ class GenericTest {
     }
 
     @SuppressWarnings("unused")
-    private static <T> T getMiddle(T[] args) {
-        return args[args.length / 2];
+
+    private static <T> T getLast(T[] array) {
+        return array[array.length - 1];
     }
 
     // TODO: please implement the following code to pass the test. It should be generic after all.
     // The method should only accept `Number` and the number should implement `Comparable<T>`
     // <--start
     @SuppressWarnings("unused")
-    private static <T extends Number & Comparable<T>> T min(T[] values) {
-        T min = values[0];
-        for (T value : values) {
-            if (min.compareTo(value) > 0) {
-                min = value;
-            }
+    private static <T extends Comparable<T>> T min(T[] array) {
+        T minValue = array[0];
+        for (T item : array) {
+            if (item.compareTo(minValue) < 0)
+                minValue = item;
         }
-        return min;
+        return minValue;
     }
-    // --end-->
 
-    // TODO: please implement following method to pass the test. But you cannot change the signature
-    // <--start
-    @SuppressWarnings("unused")
+
+
+
     private static void swap(Pair<?> pair) {
         swapWithGeneric(pair);
     }
@@ -138,44 +126,81 @@ class GenericTest {
         pair.setSecond(first);
     }
 
-    private static void genericNumber(Pair<? super Integer> pair) {
-        ArrayList<Integer> integers = new ArrayList<>();
-        ArrayList<? extends Number> integers1 = integers;
-    }
 
-    private static <T> ArrayList getArrayList() {
-        ArrayList<T> list = new ArrayList<>();
-        return list;
-    }
 
-    private static <T> ArrayList getArrayListWithParameter() {
-        ArrayList<T> list = new ArrayList<>();
-        return list;
-    }
-    // TODO: You can add additional method within the range if you like
-    // <--start
+
+
 
     // --end-->
 
-    <T> T[] toArray(int length, Generic<T> generic) {
-        return generic.returnArray(length);
+    // TODO: please implement following method to pass the test. But you cannot change the signature
+    // <--start
+    @SuppressWarnings("unused")
+    @Test
+    void should_abrase_type_is_object_when_not_bound_in_generic() throws NoSuchFieldException {
+        MyClass<String> stringMyClass = new MyClass<>();
+        Field field = stringMyClass.getClass().getDeclaredField("field");
 
+        Class<Object> expected = Object.class;
+
+        assertEquals(expected, field.getType());
     }
+
+    class MyClass<T>{
+        private T field;
+    }
+
 
     @Test
-    void should_return_array() {
-        String[] stringArray = toArray(5, (length) -> new String[length]);
+    void should_can_transfer_type() {
+        KeyValuePair<String, Integer> pair = new KeyValuePair<>("name", 2);
+        KeyValuePair keyValuePair = new KeyValuePair<>(new Object(), new Object());
+        KeyValuePair<String, Integer> havePair = keyValuePair;
+    }
 
-        assertEquals(5, stringArray.length);
-//
-        assertEquals(stringArray.getClass().getComponentType(), String.class);
+
+    @Test
+    void should_test_sub_class_can_generic() {
+        String[] array = {"1", "2"};
+        MySubClass subClass = new MySubClass(array);
+
+        Object[] array1 = subClass.getArray();
+//        String string = testSubClass(new String[]{"1", "2"});
+//        assertEquals("1", string);
+
+    }
+
+
+    class MyParentClass<T> implements Comparable<T>{
+
+        @Override
+        public int compareTo(Object o) {
+            return 0;
+        }
+    }
+
+    class MySubClass<T> extends MyParentClass<T>{
+        private T[] array;
+
+        MySubClass(T[] array) {
+            this.array = array;
+        }
+
+        public T[] getArray() {
+            return array;
+        }
+    }
+
+    private static <T extends MyParentClass<T>> T testSubClass(T[] array){
+
+        T minValue = array[0];
+        for (T item : array) {
+            if (item.compareTo(minValue) < 0)
+                minValue = item;
+        }
+        return minValue;
     }
 }
-
-interface Generic<T> {
-    T[] returnArray(int length);
-}
-
 
 
 /*

@@ -8,21 +8,22 @@ import com.cultivation.javaBasic.util.MyClosableType;
 import com.cultivation.javaBasic.showYourIntelligence.StringFormatException;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 //
 class ExceptionTest {
     @Test
     void should_customize_exception() {
         try {
-            throw new StringFormatException("the message");
+            throw new StringFormatException("message");
         } catch (StringFormatException error) {
-            assertEquals("the message", error.getMessage());
+
+            assertEquals("message", error.getMessage());
+            assertNull(error.getCause());
         }
     }
     //定制
@@ -30,6 +31,11 @@ class ExceptionTest {
     @Test
     void should_customize_exception_continued() {
         Exception innerError = new Exception("inner error");
+
+        Field[] declaredFields = Throwable.class.getDeclaredFields();
+        for (Field field : declaredFields) {
+            field.setAccessible(true);
+        }
 
         try {
             throw new StringFormatException("the message", innerError);
@@ -55,10 +61,14 @@ class ExceptionTest {
     @Test
     void should_use_the_try_pattern() {
         ClosableStateReference closableStateReference = new ClosableStateReference();
-        try (MyClosableType closable = new MyClosableType(closableStateReference);
-                MyClosableType closable1 = new MyClosableType(closableStateReference))
-        {
+        MyClosableType closableType = null;
+        try (MyClosableType closable = new MyClosableType(closableStateReference)) {
+            closableType = closable;
             assertFalse(closable.isClosed());
+
+            throw new RuntimeException();
+        } catch (RuntimeException e) {
+            assertTrue(closableType.isClosed());
         }
 
 
@@ -79,7 +89,7 @@ class ExceptionTest {
 
         try {
             try (AutoCloseable withoutThrow = new ClosableWithoutException(logger);
-                 AutoCloseable withThrow = new ClosableWithException(logger)) {
+                 AutoCloseable withThrow = new ClosableWithoutException(logger)) {
             }
         } catch (Exception e) {
             // It is okay!
@@ -87,14 +97,15 @@ class ExceptionTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String[] expected = {};
+        final String[] expected = { "ClosableWithoutException.close"};
         // --end-->
 
         assertArrayEquals(
-            expected,
-            logger.toArray());
+                expected,
+                logger.toArray());
     }
 
+    // 只会关闭非空资源
 //    在离开try块时将自动调用close()方法。该方法调用可以看做在finally块中，
 //    try括号内的资源会在try语句结束后自动释放，前提是这些可关闭的资源必须实现 java.lang.AutoCloseable 接口。
 
@@ -103,12 +114,22 @@ class ExceptionTest {
         String methodName = StackFrameHelper.getCurrentMethodName();
 
         assertEquals(
-            "com.cultivation.javaBasic.ExceptionTest.should_get_method_name_in_stack_frame",
-            methodName);
+                "com.cultivation.javaBasic.ExceptionTest.should_get_method_name_in_stack_frame",
+                methodName);
+    }
+
+    @Test
+    void methodA()  {
+        methodB();
+        assertTrue(true);
+    }
+    void methodB(){
+
     }
 
     @SuppressWarnings({"ReturnInsideFinallyBlock", "SameParameterValue"})
     private int confuse(int value) {
+        testTryOrder();
         try {
             return value * value;
         } finally {
@@ -116,23 +137,21 @@ class ExceptionTest {
                 return 0;
             }
         }
-
     }
 
 
-    void testTryOrder(){
-        try{
+    void testTryOrder() {
+        try {
             System.out.println("try");
             throw new IllegalArgumentException();
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             System.out.println("catch");
-        }
-        finally {
+        } finally {
             System.out.println("finally");
         }
     }
 }
+
 
 /*
  * - Please draw the hibachi of `Throwable` and explain the main purpose for each type.

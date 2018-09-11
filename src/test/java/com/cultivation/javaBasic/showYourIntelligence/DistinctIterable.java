@@ -1,7 +1,5 @@
 package com.cultivation.javaBasic.showYourIntelligence;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.*;
 
 public class DistinctIterable<T> implements Iterable<T> {
@@ -13,12 +11,13 @@ public class DistinctIterable<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
+
         return new DistinctIterator<>(iterable.iterator());
     }
 
     public List<T> toList() {
         ArrayList<T> result = new ArrayList<>();
-        this.forEach(result::add);
+        this.forEach(result::add); //this 实现iterable，重写iterator()
         return result;
     }
 }
@@ -28,8 +27,9 @@ class DistinctIterator<E> implements Iterator<E> {
     // <--start
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final Iterator<E> iterator;
-    private List<E> list = new ArrayList<>();
+    private Set<E> set = new HashSet<>();
     private E cachedNext;
+
     DistinctIterator(Iterator<E> iterator) {
         this.iterator = iterator;
     }
@@ -39,8 +39,7 @@ class DistinctIterator<E> implements Iterator<E> {
         while (iterator.hasNext()) {
             E next = iterator.next();
 
-            if (!list.contains(next)) {
-                list.add(next);
+            if (set.add(next)) {
                 cachedNext = next;
                 return true;
             }
@@ -50,7 +49,11 @@ class DistinctIterator<E> implements Iterator<E> {
 
     @Override
     public E next() {
+        if(cachedNext == null){
+            return iterator.hasNext() ? iterator.next() : null;
+        }
         return cachedNext;
     }
+
     // --end->
 }

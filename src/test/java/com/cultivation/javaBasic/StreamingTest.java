@@ -64,6 +64,7 @@ class StreamingTest {
         }
     }
 
+//    private static <T> Stream<T> empty()
 
     @SuppressWarnings("ConstantConditions")
     @Test

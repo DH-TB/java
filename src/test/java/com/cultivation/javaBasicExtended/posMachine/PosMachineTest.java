@@ -116,6 +116,14 @@ class PosMachineTest {
         assertThrows(IllegalStateException.class, () -> posMachine.printReceipt(barcode));
     }
 
+    @Test
+    void should_throw_if_barcode_illegal() throws IOException {
+        PosMachine posMachine = new PosMachine();
+        final String barcode = createBarCodes("1234");
+
+        assertThrows(IllegalStateException.class, () -> posMachine.printReceipt(barcode));
+    }
+
     private String createBarCodes(String ...ids) throws IOException {
         StringWriter writer = new StringWriter();
         ObjectMapper objectMapper = new ObjectMapper();

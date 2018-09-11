@@ -39,8 +39,6 @@ class DateTimeTest {
     @Test
     void should_be_careful_when_adding_by_month() {
         LocalDate endOfJan = LocalDate.of(2016, 1, 31);
-        LocalDate endOfJan1 = LocalDate.of(2016, 1, 31);
-
 
         LocalDate localDate = endOfJan.plusMonths(1);
         // TODO: please modify the following code to pass the test

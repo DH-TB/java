@@ -5,13 +5,10 @@ public class StackFrameHelper {
         // TODO: please modify the following code to pass the test
         // <--start
 
-        StackTraceElement[] exceptionInfo = new Exception().getStackTrace();
+        StackTraceElement[] exceptionInfo = new Throwable().getStackTrace();
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (StackTraceElement stackTraceElement : exceptionInfo){
-            System.out.println(stackTraceElement.getClassName());
-        }
-        if(exceptionInfo.length > 0){
+        if(exceptionInfo.length >= 1){
             stringBuilder.append(exceptionInfo[1].getClassName())
                     .append(".")
                     .append(exceptionInfo[1].getMethodName());

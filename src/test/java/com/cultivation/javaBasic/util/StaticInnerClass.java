@@ -25,19 +25,6 @@ public class StaticInnerClass {
         }
 
         public static class InnerClass1{
-
         }
-    }
-
-}
-
-class Instance{
-    void getInstance(){
-        StaticInnerClass.Inner inner = new StaticInnerClass.Inner();
-        StaticInnerClass.Inner.InnerClass innerClass = inner.new InnerClass();
-
-
-        StaticInnerClass.Inner.InnerClass1 innerClass1 = new StaticInnerClass.Inner.InnerClass1();
-        
     }
 }
