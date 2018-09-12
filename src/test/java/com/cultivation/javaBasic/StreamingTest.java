@@ -290,23 +290,15 @@ class StreamingTest {
     @SuppressWarnings({"unused", "ConstantConditions"})
     @Test
     void should_flatten_stream_of_streams() {
-        Stream<Stream<Character>> nameStream = Stream
-                .of("Naruto", "Kisuke", "Tomoya")
-                .map(text -> letters(text));
+        Stream<Stream<Character>> streamStream = Stream.of("Hello", "World").map(string -> string.chars().mapToObj(item -> (char) item));
 
-        // TODO: please modify the following code to pass the test
-        // <--start
-//        Stream<Character> flatted = nameStream.flatMap(Function.identity());
-        Stream<Character> flatted = nameStream.flatMap(name -> name);
-        // --end-->
-        {
-            assertArrayEquals(
-                    new Character[]{
-                            'N', 'a', 'r', 'u', 't', 'o', 'K', 'i', 's', 'u', 'k',
-                            'e', 'T', 'o', 'm', 'o', 'y', 'a'
-                    },
-                    flatted.toArray(Character[]::new));
-        }
+        Stream<Character> characterStream = streamStream.flatMap(item -> item);
+
+        Character[] characters = characterStream.toArray(Character[]::new);
+
+        Character[] expected = {'H', 'e', 'l', 'l', 'o', 'W', 'o', 'r', 'l', 'd'};
+
+        assertArrayEquals(expected, characters);
     }
 
 
@@ -329,6 +321,35 @@ class StreamingTest {
             );
         }
     }
+
+    @Test
+    void should_test_limit_execute_time() {
+        Count count = new Count();
+        int limitTime = 10;
+
+        Integer[] integers = Stream.iterate(0, integer -> {
+            count.time++;
+            return integer + 1;
+        }).limit(limitTime).toArray(Integer[]::new);
+
+        assertEquals(limitTime - 1, count.time);
+    }
+
+
+    @Test
+    void should_test_concat_sorted() {
+        Stream<Character> worldStream = Stream.of('c', 'b');
+        Stream<Character> worldStream1 = Stream.of('a', 'd');
+
+        Object[] actual = Stream.concat(worldStream.sorted(), worldStream1.sorted()).toArray();
+
+        Object[] expectConcatNotSort = Stream.of('b', 'c', 'a', 'd').toArray();
+        assertArrayEquals(expectConcatNotSort, actual);
+
+        Object[] expectConcatSort = Stream.of('a', 'b', 'c', 'd').toArray();
+        assertNotSame(expectConcatSort, actual);
+    }
+
 
     @SuppressWarnings({"unused", "ConstantConditions"})
     @Test
@@ -354,7 +375,6 @@ class StreamingTest {
         assertArrayEquals(characters, concat.toArray(Character[]::new));
     }
 
-
     @SuppressWarnings({"SpellCheckingInspection", "unused", "ConstantConditions"})
     @Test
     void should_get_unique_items() {
@@ -374,7 +394,19 @@ class StreamingTest {
         }
     }
 
-    //////////////?
+    @Test
+    void should_test() {
+        Stream<Character> characterStream = letters("ofoa");
+        Stream<Character> distinct = characterStream.distinct();
+
+        Character[] character = distinct.unordered().toArray(Character[]::new);
+
+        Character[] characters = {'o', 'f', 'a'};
+
+        assertArrayEquals(characters, character);
+    }
+
+    ////////////// ?
     @Test
     void should_hook_stream_generation() {
         ValueHolder<Integer> holder = new ValueHolder<>();
@@ -387,19 +419,40 @@ class StreamingTest {
                 .peek(v -> holder.setValue(holder.getValue() + v));
 
         hookStream.forEach(i -> {
-        });
+        });   //终端操作，为了执行
 
         // TODO: please modify the following code to pass the test
         // <--start
         final int expected = 90;
-
-        //从2加到18
-
+        //从0加到18
         // --end-->
-
         assertEquals(expected, holder.getValue().intValue());
     }
 
+    @Test
+    void should_test_peek() {
+        Stream.of("one", "two", "three")
+                .filter(item -> item.length() > 2)
+                .peek(item -> System.out.println("filter:" + item))
+                .map(item -> item.toUpperCase())
+                .peek(item -> System.out.println("map:" + item))
+                .collect(Collectors.toList());
+    }
+
+    @Test
+    void should_test_peek_() {
+        ValueHolder<Integer> holder = new ValueHolder<>();
+        holder.setValue(1);
+
+        int num = 2;
+
+        Stream.of(holder).peek(v -> holder.setValue(num)).forEach(integerValueHolder -> {});
+
+        assertEquals(num, holder.getValue().intValue());
+    }
+
+    // peek里面可以修改值，会对原本的stream 有影响
+    
     @SuppressWarnings({"ConstantConditions", "unchecked", "OptionalAssignedToNull"})
     @Test
     void should_throws_if_get_value_of_empty_optional() {
@@ -559,17 +612,19 @@ class StreamingTest {
         // TODO: please implement toMap collector using `stream.collect`. You cannot use existing `toMap` collector.
         // <--start
 
-        Map<String, Integer> map = stream.collect(Collectors.
-                toMap(KeyValuePair->KeyValuePair.getKey(),KeyValuePair->KeyValuePair.getValue()));
+//        Map<String, Integer> map1 = stream.collect(Collectors.
+//                toMap(item -> item.getKey(), item -> item.getValue()));
 
-//        HashMap<String, Integer> map = stream.collect(Collector.of(
-//                HashMap::new,
-//                (s, a) -> s.put(a.getKey(), a.getValue()),
-//                (left, right) -> {
-//                    left.putAll(right);
-//                    return left;
-//                }
-//        ));
+        //       put 重复的会报错
+
+        HashMap<String, Integer> map = stream.collect(Collector.of(
+                HashMap::new,
+                (s, a) -> s.put(a.getKey(), a.getValue()),
+                (left, right) -> {
+                    left.putAll(right);
+                    return left;
+                }
+        ));
 
 
         // --end-->
