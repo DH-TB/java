@@ -22,5 +22,12 @@ public class AnonymousClassUpdateField {
 
         };
         runnable.run();
+
+        Employee employee = new Employee() {
+        };
+        employee.getTitle();
+
     }
+
 }
+

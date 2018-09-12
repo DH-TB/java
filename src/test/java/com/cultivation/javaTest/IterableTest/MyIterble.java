@@ -2,7 +2,7 @@ package com.cultivation.javaTest.IterableTest;
 
 import java.util.Iterator;
 
-class MyIterable<T> implements Iterable<T> {
+class MyIterable<T extends Number & Comparable<T>> implements Iterable<T> {
     private T start;
     private T end;
 
@@ -13,33 +13,32 @@ class MyIterable<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-//        return new MyIterableImpl<>(start, end);
-        return null;
+        return new MyIterableImpl<>(start, end);
     }
 }
 
-/*
-class MyIterableImpl<E> implements Iterator<E> {
+
+class MyIterableImpl<E extends Number & Comparable<E>> implements Iterator<E> {
     private E start;
     private E end;
 
     MyIterableImpl(E start, E end) {
         this.start = start;
+
         this.end = end;
     }
 
     @Override
     public boolean hasNext() {
         double pow =  Math.pow((Double) start, 10);
-        boolean b = pow < end;
-        return b;
+        double end = (Double)this.end;
+        return pow < end;
     }
 
     @Override
     public E next() {
-        E element = start++;
-        return element;
+        Double start = (Double) this.start;
+        start++;
+        return (E) start;
     }
-
-
-}*/
+}
